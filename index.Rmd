@@ -36,7 +36,10 @@ install.packages("Signac")
 - Signac installation: https://stuartlab.org/signac/articles/install
 - SeuratData installation: https://github.com/satijalab/seurat-data
 
-# Prerequisites
+# About Data
+
+The data used in this hands-on tutorial is a public single cell 'multiome' dataset of cryopreserved human peripheral blood mononuclear cells (PBMC) from 10x Genomics. This dataset is collected from a 25-year-old healthy female donor with around 10,000 cells, and scRNA-seq and scATAC-seq profiles were simultaneously sequenced from the same cells. You can find all information about this data and Cell Ranger ARC output reports from [10x Genomics website](https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k?). For the purposes of this vignette, we treat the datasets as originating from two different experiments and integrate them together. Since they were originally measured in the same cells, this provides a ground truth that we can use to assess the accuracy of integration. We emphasize that our use of the multiome dataset here is for demonstration and evaluation purposes, and that users should apply these methods to scRNA-seq and scATAC-seq datasets that are collected separately. 
+
 
 This is a _sample_ book written in **Markdown**. You can use anything that Pandoc's Markdown supports, e.g., a math equation $a^2 + b^2 = c^2$.
 
