@@ -202,6 +202,9 @@ div.csl-indent {
 <blockquote>
 <p>Note that the Cell Ranger ARC pipeline can only analyze Gene Expression and ATAC data together. It must not be used to analyze Gene Expression or ATAC alone. If scRNA-seq and scATAC-seq are generated from separate experiments, you should process them separately– using <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest">Cell Ranger</a> for processing scRNA-seq and <a href="https://support.10xgenomics.com/single-cell-atac/software/overview/welcome">Cell Ranger ATAC</a> for processing scATAC-seq.</p>
 </blockquote>
+<p>The analysis involves the following steps:
+* Step1: Run <code>cellranger-arc mkfastq</code> on the Illumina <code>BCL</code> output folder for each ATAC (GEX resp.) flow cell to generate ATAC (GEX resp.) FASTQ data. Note that a separate run of <code>mkfastq</code> is required for each ATAC and each GEX flow cell.
+* Run a separate instance of <code>cellranger-arc count</code> for each GEM well that was demultiplexed by the cellranger-arc mkfastq in the previous step.</p>
 
 </div>
             </section>

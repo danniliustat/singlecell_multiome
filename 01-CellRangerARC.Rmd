@@ -3,3 +3,7 @@
 Cell Ranger ARC is a set of analysis pipelines that process Chromium Single Cell Multiome ATAC + Gene Expression sequencing data to generate a variety of analyses pertaining to gene expression (GEX), chromatin accessibility, and their linkage. The pipeline includes base calling, sample demultiplexing, mapping, peak calling and read counting. You can refer to the complete instructions from 10x Genomics [here](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/running-pipelines/single-library-analysis).
 
 > Note that the Cell Ranger ARC pipeline can only analyze Gene Expression and ATAC data together. It must not be used to analyze Gene Expression or ATAC alone. If scRNA-seq and scATAC-seq are generated from separate experiments, you should process them separately-- using [Cell Ranger](https://www.10xgenomics.com/support/software/cell-ranger/latest) for processing scRNA-seq and [Cell Ranger ATAC](https://support.10xgenomics.com/single-cell-atac/software/overview/welcome) for processing scATAC-seq.
+
+The analysis involves the following steps:
+* Step1: Run `cellranger-arc mkfastq` on the Illumina `BCL` output folder for each ATAC (GEX resp.) flow cell to generate ATAC (GEX resp.) FASTQ data. Note that a separate run of `mkfastq` is required for each ATAC and each GEX flow cell.
+* Run a separate instance of `cellranger-arc count` for each GEM well that was demultiplexed by the cellranger-arc mkfastq in the previous step.
