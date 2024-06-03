@@ -22,14 +22,12 @@ In this hands-on tutorial, we present a complete workflow for analyzing multiome
 
 
 ## Environment requirements
+If you are running using your own laptop, please make sure you ahve the latest R and RStudio installed. You can refer to [RStudio website](https://posit.co/download/rstudio-desktop/) for installation instructions. If you are running using UCI HPC3 environment, please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a server under R 4.3.3 with Seurat available in the environment. 
 
-Need to install the following packages before running the codes.
+Please make sure to install the following packages before running the codes. `Seurat` and `SeuratData` should have installed in the environment if you are using HPC3 server.
+
 ```{r eval=FALSE}
 # Enter commands in R (or R studio, if installed)
-r = getOption("repos")
-r["CRAN"] = "http://cran.us.r-project.org"
-options(repos = r)
-
 install.packages('Seurat')
 library(Seurat)
 
@@ -39,6 +37,11 @@ devtools::install_github('satijalab/seurat-data')
 
 setRepositories(ind=1:3) # needed to automatically install Bioconductor dependencies
 install.packages("Signac")
+
+# Installing genome assembly and gene annotation packages
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg38', 'EnsDb.Hsapiens.v86'))
 ```
 
 - Seurat installation: https://satijalab.org/seurat/articles/install_v5

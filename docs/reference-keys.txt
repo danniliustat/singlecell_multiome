@@ -16,3 +16,12 @@ fig:unnamed-chunk-1
 fig:unnamed-chunk-2-1
 fig:unnamed-chunk-2-2
 construct-folder-structure-in-hpc3
+fig:unnamed-chunk-2
+fig:unnamed-chunk-3
+bcl-naming-convention-and-csv-sample-sheet
+cellranger-arc-mkfastq
+demultiplexing
+csv-sample-sheet
+example-codes
+cellranger_arc
+seuratqc

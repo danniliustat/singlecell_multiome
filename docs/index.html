@@ -23,7 +23,7 @@
 <meta name="author" content="Danni Liu" />
 
 
-<meta name="date" content="2024-06-02" />
+<meta name="date" content="2024-06-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 
-<link rel="next" href="intro.html"/>
+<link rel="next" href="cellranger_arc.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -56,7 +56,7 @@
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -123,28 +123,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -166,9 +144,18 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#about-data"><i class="fa fa-check"></i><b>1.1</b> About Data</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Environment requirements</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#construct-folder-structure-in-hpc3"><i class="fa fa-check"></i><b>1.3</b> Construct folder structure in HPC3</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Preprocessing sequencing data using Cell Ranger ARC</a></li>
-<li class="chapter" data-level="3" data-path="load-data-and-create-seurat-objects.html"><a href="load-data-and-create-seurat-objects.html"><i class="fa fa-check"></i><b>3</b> Load data and create Seurat objects</a></li>
+<li class="chapter" data-level="2" data-path="cellranger_arc.html"><a href="cellranger_arc.html"><i class="fa fa-check"></i><b>2</b> Cell Ranger ARC for preprocessing sequencing data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="cellranger_arc.html"><a href="cellranger_arc.html#bcl-naming-convention-and-csv-sample-sheet"><i class="fa fa-check"></i><b>2.1</b> BCL naming convention and CSV sample sheet</a></li>
+<li class="chapter" data-level="2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-mkfastq"><i class="fa fa-check"></i><b>2.2</b> <code>cellranger-arc mkfastq</code></a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="cellranger_arc.html"><a href="cellranger_arc.html#demultiplexing"><i class="fa fa-check"></i><b>2.2.1</b> Demultiplexing</a></li>
+<li class="chapter" data-level="2.2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#example-codes"><i class="fa fa-check"></i><b>2.2.2</b> Example codes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="seuratqc.html"><a href="seuratqc.html"><i class="fa fa-check"></i><b>3</b> Load data and create Seurat objects</a></li>
 <li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>4.1</b> math example</a></li>
@@ -203,7 +190,7 @@ div.csl-indent {
 <div id="header">
 <h1 class="title">Hands-on Analysis on Single Cell Multiome</h1>
 <p class="author"><em>Danni Liu</em></p>
-<p class="date"><em>2024-06-02</em></p>
+<p class="date"><em>2024-06-03</em></p>
 </div>
 <div id="prerequisites" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Prerequisites<a href="index.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -214,28 +201,34 @@ div.csl-indent {
 </div>
 <div id="environment-requirements" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Environment requirements<a href="index.html#environment-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Need to install the following packages before running the codes.</p>
+<p>If you are running using your own laptop, please make sure you ahve the latest R and RStudio installed. You can refer to <a href="https://posit.co/download/rstudio-desktop/">RStudio website</a> for installation instructions. If you are running using UCI HPC3 environment, please navigate to the <a href="https://hpc3.rcic.uci.edu/biojhub4/hub/login">JypyterHub portal</a>, and start a server under R 4.3.3 with Seurat available in the environment.</p>
+<p>Please make sure to install the following packages before running the codes. <code>Seurat</code> and <code>SeuratData</code> should have installed in the environment if you are using HPC3 server.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="co"># Enter commands in R (or R studio, if installed)</span></span>
-<span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">getOption</span>(<span class="st">&quot;repos&quot;</span>)</span>
-<span id="cb1-3"><a href="index.html#cb1-3" tabindex="-1"></a>r[<span class="st">&quot;CRAN&quot;</span>] <span class="ot">=</span> <span class="st">&quot;http://cran.us.r-project.org&quot;</span></span>
-<span id="cb1-4"><a href="index.html#cb1-4" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> r)</span>
-<span id="cb1-5"><a href="index.html#cb1-5" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="index.html#cb1-6" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;Seurat&#39;</span>)</span>
-<span id="cb1-7"><a href="index.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;Seurat&#39;</span>)</span>
+<span id="cb1-3"><a href="index.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb1-4"><a href="index.html#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="index.html#cb1-5" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb1-6"><a href="index.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb1-7"><a href="index.html#cb1-7" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&#39;satijalab/seurat-data&#39;</span>)</span>
 <span id="cb1-8"><a href="index.html#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="index.html#cb1-9" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
-<span id="cb1-10"><a href="index.html#cb1-10" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb1-11"><a href="index.html#cb1-11" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&#39;satijalab/seurat-data&#39;</span>)</span>
-<span id="cb1-12"><a href="index.html#cb1-12" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="index.html#cb1-13" tabindex="-1"></a><span class="fu">setRepositories</span>(<span class="at">ind=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="co"># needed to automatically install Bioconductor dependencies</span></span>
-<span id="cb1-14"><a href="index.html#cb1-14" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;Signac&quot;</span>)</span></code></pre></div>
+<span id="cb1-9"><a href="index.html#cb1-9" tabindex="-1"></a><span class="fu">setRepositories</span>(<span class="at">ind=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="co"># needed to automatically install Bioconductor dependencies</span></span>
+<span id="cb1-10"><a href="index.html#cb1-10" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;Signac&quot;</span>)</span>
+<span id="cb1-11"><a href="index.html#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="index.html#cb1-12" tabindex="-1"></a><span class="co"># Installing genome assembly and gene annotation packages</span></span>
+<span id="cb1-13"><a href="index.html#cb1-13" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-14"><a href="index.html#cb1-14" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb1-15"><a href="index.html#cb1-15" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&#39;BSgenome.Hsapiens.UCSC.hg38&#39;</span>, <span class="st">&#39;EnsDb.Hsapiens.v86&#39;</span>))</span></code></pre></div>
 <ul>
 <li>Seurat installation: <a href="https://satijalab.org/seurat/articles/install_v5" class="uri">https://satijalab.org/seurat/articles/install_v5</a></li>
 <li>Signac installation: <a href="https://stuartlab.org/signac/articles/install" class="uri">https://stuartlab.org/signac/articles/install</a></li>
 <li>SeuratData installation: <a href="https://github.com/satijalab/seurat-data" class="uri">https://github.com/satijalab/seurat-data</a></li>
 </ul>
-<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports, e.g., a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
-<p>The <strong>bookdown</strong> package can be installed from CRAN or Github:</p>
+</div>
+<div id="construct-folder-structure-in-hpc3" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Construct folder structure in HPC3<a href="index.html#construct-folder-structure-in-hpc3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" tabindex="-1"></a>cd <span class="sc">/</span>path<span class="sc">/</span>to<span class="sc">/</span>myfolder <span class="co"># set the working directory</span></span>
+<span id="cb2-2"><a href="index.html#cb2-2" tabindex="-1"></a>mkdir <span class="sc">-</span>p {cellranger,seurat_results} <span class="co"># create new folders</span></span>
+<span id="cb2-3"><a href="index.html#cb2-3" tabindex="-1"></a>ls <span class="co"># list all files</span></span></code></pre></div>
 
 </div>
 </div>
@@ -245,7 +238,7 @@ div.csl-indent {
         </div>
       </div>
 
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="cellranger_arc.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
