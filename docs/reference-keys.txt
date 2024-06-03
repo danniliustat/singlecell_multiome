@@ -12,3 +12,7 @@ example-two
 final-words
 about-data
 load-data-and-create-seurat-objects
+fig:unnamed-chunk-1
+fig:unnamed-chunk-2-1
+fig:unnamed-chunk-2-2
+construct-folder-structure-in-hpc3

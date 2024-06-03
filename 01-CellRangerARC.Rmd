@@ -1,4 +1,4 @@
-# Preprocessing sequencing data using Cell Ranger ARC {#intro}
+# Cell Ranger ARC for preprocessing sequencing data {#intro}
 
 Cell Ranger ARC is a set of analysis pipelines that process Chromium Single Cell Multiome ATAC + Gene Expression sequencing data to generate a variety of analyses pertaining to gene expression (GEX), chromatin accessibility, and their linkage. The pipeline includes base calling, sample demultiplexing, mapping, peak calling and read counting. You can refer to the complete instructions from 10x Genomics [here](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/running-pipelines/single-library-analysis).
 
@@ -6,4 +6,37 @@ Cell Ranger ARC is a set of analysis pipelines that process Chromium Single Cell
 
 The analysis involves the following steps:
 * Step1: Run `cellranger-arc mkfastq` on the Illumina `BCL` output folder for each ATAC (GEX resp.) flow cell to generate ATAC (GEX resp.) FASTQ data. Note that a separate run of `mkfastq` is required for each ATAC and each GEX flow cell.
-* Run a separate instance of `cellranger-arc count` for each GEM well that was demultiplexed by the cellranger-arc mkfastq in the previous step.
+* Step 2: Run a separate instance of `cellranger-arc count` for each GEM well that was demultiplexed by the `cellranger-arc mkfastq` in the previous step.
+
+```{r echo=FALSE, fig.align = 'center', out.width = "100%", fig.cap = "The new SSA logo, which is actually a scatterplot, which is super neat!", }
+knitr::include_graphics("images/gex-atac.png")
+```
+
+```{r echo=FALSE, fig.align = 'center', out.width = "100%", fig.cap = "The new SSA logo, which is actually a scatterplot, which is super neat!", }
+knitr::include_graphics("images/ATAC-1.png")
+```
+```{r echo=FALSE, fig.align = 'center', out.width = "100%", fig.cap = "The new SSA logo, which is actually a scatterplot, which is super neat!", }
+knitr::include_graphics("images/GEX-multiplex.png")
+```
+
+## Fastq files and BCL naming convention
+The FASTQ data files are already prepared and saved in "/anvil/projects/x-tra220018/2023/datasets/single_cellData/Ratliff_CAF/". You don't have access to make changes in this directory. But you can try codes by changing the output path to your directory. Below is the directory structure:
+
+030386_Control-CAF_S1_run656_L001_R1_001.fastq.gz
+030386_Control-CAF_S1_run656_L001_R2_001.fastq.gz
+030386_Control-CAF_S1_run656_L002_R1_001.fastq.gz
+030386_Control-CAF_S1_run656_L002_R2_001.fastq.gz
+
+Please notice that cell ranger requires the input FASTQ files to have a special naming convention of bcl2fastq or mkfastq: eg. Sample_S1_L00X_R1_001.fastq.gz. Briefly, FASTQ files taken by cellranger count are named with the sample name and number, the flow cell lane, and read. The file extension is '*.fastq.gz'. An example of FASTQ file name looks like this: samplename_S1_L001_R1_001.fastq.gz.
+
+If the downloaded *.fastq.gz files are not in this naming convention, you will need to manually rename all files before you can call `cellranger count`.
+Here is the explaination for each element in the name:
+
+samplename: The name of the sample provided in the sample sheet. If a sample name is not available, the file name uses the sample ID instead.
+S1: The number of the sample based on the order that samples are listed in the sample sheet, starting with 1.
+L001: The lane number of the flow cell, starting with lane 1, to the number of lanes supported.
+R1: The read index. R1 indicates Read 1. R2 indicates Read 2 of a paired-end run.
+001: The last portion of the file name is always 001.
+Special Note: L001 and L002 are indices of different Illumina sequencing lanes or batches, and we can use these indices as well as sample indices as means by which to distinguish treatment groups. If we want to analyze all samples in one treatment group together, they will be assigned the same sample number (e.g. S1) and different lane number (e.g. L001 and L002). (NOTE: Reads cannot be assigned as sample number 0 or lane number 0. If it has number 0, it will be excluded from downstream analysis.) For example, if there are 2 treatment groups each has 3 replicates, we will index all three replicates in group 1 as S1_L001, S1_L002, S1_L003 and replicates in group 2 as S2_L001, S2_L002 and S3_L003.
+
+Please refer to Illumina or bcl2fastq User Guide for more details.

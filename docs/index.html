@@ -31,7 +31,7 @@
   
   
 
-<link rel="next" href="about-data.html"/>
+<link rel="next" href="intro.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -162,20 +162,23 @@ div.csl-indent {
 <li><a href="./">Hands-on Analysis on Single Cell Multiome</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Environment requirements</a></li>
-<li class="chapter" data-level="2" data-path="about-data.html"><a href="about-data.html"><i class="fa fa-check"></i><b>2</b> About Data</a></li>
-<li class="chapter" data-level="3" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>3</b> Preprocessing sequencing data using Cell Ranger ARC</a></li>
-<li class="chapter" data-level="4" data-path="load-data-and-create-seurat-objects.html"><a href="load-data-and-create-seurat-objects.html"><i class="fa fa-check"></i><b>4</b> Load data and create Seurat objects</a></li>
-<li class="chapter" data-level="5" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>5</b> Methods</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>5.1</b> math example</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#about-data"><i class="fa fa-check"></i><b>1.1</b> About Data</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Environment requirements</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>6</b> Applications</a>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Preprocessing sequencing data using Cell Ranger ARC</a></li>
+<li class="chapter" data-level="3" data-path="load-data-and-create-seurat-objects.html"><a href="load-data-and-create-seurat-objects.html"><i class="fa fa-check"></i><b>3</b> Load data and create Seurat objects</a></li>
+<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>6.1</b> Example one</a></li>
-<li class="chapter" data-level="6.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>6.2</b> Example two</a></li>
+<li class="chapter" data-level="4.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>4.1</b> math example</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>7</b> Final Words</a></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -202,8 +205,15 @@ div.csl-indent {
 <p class="author"><em>Danni Liu</em></p>
 <p class="date"><em>2024-06-02</em></p>
 </div>
-<div id="environment-requirements" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Environment requirements<a href="index.html#environment-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prerequisites" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Prerequisites<a href="index.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="about-data" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> About Data<a href="index.html#about-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The data used in this hands-on tutorial is a public single cell ‘multiome’ dataset of cryopreserved human peripheral blood mononuclear cells (PBMC) from 10x Genomics. This dataset is collected from a 25-year-old healthy female donor with around 10,000 cells, and scRNA-seq and scATAC-seq profiles were simultaneously sequenced from the same cells. You can find all information about this data and Cell Ranger ARC output reports from <a href="https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k?">10x Genomics website</a>.</p>
+<p>In this hands-on tutorial, we present a complete workflow for analyzing multiome data starting from sequencing data, with an additional section for data integration of multiomics datasets that are collected from different experiments. We will demonstrate how to preprocess raw sequencing data using Cell Ranger ARC, perform data quality control, cluster and annotate cell types, and identify marker genes using differential expression (DE) analysis. Then we will treat the two profiles of scRNA-seq and scATAC-seq as originating from two separate experiments, and perform data integration. Since they were originally measured in the same cells, this provides a ground truth that we can use to assess the accuracy of integration.</p>
+</div>
+<div id="environment-requirements" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Environment requirements<a href="index.html#environment-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Need to install the following packages before running the codes.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="co"># Enter commands in R (or R studio, if installed)</span></span>
 <span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">getOption</span>(<span class="st">&quot;repos&quot;</span>)</span>
@@ -224,6 +234,10 @@ div.csl-indent {
 <li>Signac installation: <a href="https://stuartlab.org/signac/articles/install" class="uri">https://stuartlab.org/signac/articles/install</a></li>
 <li>SeuratData installation: <a href="https://github.com/satijalab/seurat-data" class="uri">https://github.com/satijalab/seurat-data</a></li>
 </ul>
+<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports, e.g., a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
+<p>The <strong>bookdown</strong> package can be installed from CRAN or Github:</p>
+
+</div>
 </div>
             </section>
 
@@ -231,7 +245,7 @@ div.csl-indent {
         </div>
       </div>
 
-<a href="about-data.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

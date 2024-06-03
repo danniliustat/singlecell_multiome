@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Preprocessing sequencing data using Cell Ranger ARC | Hands-on Analysis on Single Cell Multiome</title>
+  <title>Chapter 2 Cell Ranger ARC for preprocessing sequencing data | Hands-on Analysis on Single Cell Multiome</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Preprocessing sequencing data using Cell Ranger ARC | Hands-on Analysis on Single Cell Multiome" />
+  <meta property="og:title" content="Chapter 2 Cell Ranger ARC for preprocessing sequencing data | Hands-on Analysis on Single Cell Multiome" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Preprocessing sequencing data using Cell Ranger ARC | Hands-on Analysis on Single Cell Multiome" />
+  <meta name="twitter:title" content="Chapter 2 Cell Ranger ARC for preprocessing sequencing data | Hands-on Analysis on Single Cell Multiome" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -162,8 +162,13 @@ div.csl-indent {
 <li><a href="./">Hands-on Analysis on Single Cell Multiome</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Environment requirements</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Preprocessing sequencing data using Cell Ranger ARC</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#about-data"><i class="fa fa-check"></i><b>1.1</b> About Data</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Environment requirements</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#construct-folder-structure-in-hpc3"><i class="fa fa-check"></i><b>1.3</b> Construct folder structure in HPC3</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Cell Ranger ARC for preprocessing sequencing data</a></li>
 <li class="chapter" data-level="3" data-path="load-data-and-create-seurat-objects.html"><a href="load-data-and-create-seurat-objects.html"><i class="fa fa-check"></i><b>3</b> Load data and create Seurat objects</a></li>
 <li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a>
 <ul>
@@ -197,14 +202,32 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="intro" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Preprocessing sequencing data using Cell Ranger ARC<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">Chapter 2</span> Cell Ranger ARC for preprocessing sequencing data<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Cell Ranger ARC is a set of analysis pipelines that process Chromium Single Cell Multiome ATAC + Gene Expression sequencing data to generate a variety of analyses pertaining to gene expression (GEX), chromatin accessibility, and their linkage. The pipeline includes base calling, sample demultiplexing, mapping, peak calling and read counting. You can refer to the complete instructions from 10x Genomics <a href="https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/running-pipelines/single-library-analysis">here</a>.</p>
 <blockquote>
 <p>Note that the Cell Ranger ARC pipeline can only analyze Gene Expression and ATAC data together. It must not be used to analyze Gene Expression or ATAC alone. If scRNA-seq and scATAC-seq are generated from separate experiments, you should process them separately– using <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest">Cell Ranger</a> for processing scRNA-seq and <a href="https://support.10xgenomics.com/single-cell-atac/software/overview/welcome">Cell Ranger ATAC</a> for processing scATAC-seq.</p>
 </blockquote>
 <p>The analysis involves the following steps:
 * Step1: Run <code>cellranger-arc mkfastq</code> on the Illumina <code>BCL</code> output folder for each ATAC (GEX resp.) flow cell to generate ATAC (GEX resp.) FASTQ data. Note that a separate run of <code>mkfastq</code> is required for each ATAC and each GEX flow cell.
-* Run a separate instance of <code>cellranger-arc count</code> for each GEM well that was demultiplexed by the cellranger-arc mkfastq in the previous step.</p>
+* Step 2: Run a separate instance of <code>cellranger-arc count</code> for each GEM well that was demultiplexed by the <code>cellranger-arc mkfastq</code> in the previous step.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<img src="images/gex-atac.png" alt="The new SSA logo, which is actually a scatterplot, which is super neat!" width="100%" />
+<p class="caption">
+Figure 2.1: The new SSA logo, which is actually a scatterplot, which is super neat!
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2-1"></span>
+<img src="images/ATAC-1.png" alt="The new SSA logo, which is actually a scatterplot, which is super neat!" width="100%" />
+<p class="caption">
+Figure 2.2: The new SSA logo, which is actually a scatterplot, which is super neat!
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2-2"></span>
+<img src="images/GEX-multiplex.png" alt="The new SSA logo, which is actually a scatterplot, which is super neat!" width="100%" />
+<p class="caption">
+Figure 2.3: The new SSA logo, which is actually a scatterplot, which is super neat!
+</p>
+</div>
 
 </div>
             </section>
