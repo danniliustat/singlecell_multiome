@@ -1,0 +1,75 @@
+# Normalization and cell cycle correction
+
+
+```{r eval=TRUE,echo =F,results=FALSE,warning=FALSE,message=FALSE}
+library(Seurat)
+library(SeuratData)
+library(Signac)
+library(BSgenome.Hsapiens.UCSC.hg38) 
+library(EnsDb.Hsapiens.v86)
+library(ggplot2)
+library(cowplot)
+library(hdf5r)
+library(dplyr)
+library(patchwork)
+library(clustree)
+```
+
+Continue from last checkpoint:
+```{r eval=F}
+pbmc<-readRDS("pbmc_qc.rds")
+```
+
+## Normalization
+
+Need to be performed on "RNA" and "ATAC" assays separately.
+```{r eval=F}
+# RNA analysis
+DefaultAssay(pbmc) <- "RNA"
+pbmc<-NormalizeData(object = pbmc, normalization.method = "LogNormalize", scale.factor = 1000000)
+
+# ATAC analysis
+# We exclude the first dimension as this is typically correlated with sequencing depth
+DefaultAssay(pbmc) <- "ATAC"
+pbmc <- RunTFIDF(pbmc)
+```
+
+## Cell cycle correction and scale data
+Need to normalize data first before calculating cell cycle score
+```{r eval=F,warning=FALSE,message=FALSE}
+DefaultAssay(pbmc) <- "RNA"
+pbmc<-NormalizeData(pbmc)
+# Cell cycle scoring
+s.genes <- cc.genes$s.genes ## cc.genes is in Seurat package
+g2m.genes <- cc.genes$g2m.genes
+pbmc  <- CellCycleScoring(pbmc, s.features = s.genes, g2m.features = g2m.genes, set.ident = F)
+unique(pbmc@meta.data$Phase)
+# [1] "G2M" "S"   "G1" 
+```
+
+```{r eval=F}
+## regress out unwanted variations
+pbmc@meta.data$CC.Difference <- pbmc@meta.data$S.Score - pbmc@meta.data$G2M.Score
+# Note: this might take one hour if you request few CPU cores.
+pbmc <- ScaleData(object = pbmc, vars.to.regress = c("nCount_RNA", "percent.mt", "CC.Difference"))
+# you can proceed without regressing out unwanted variations
+pbmc <- ScaleData(object = pbmc)
+
+# also, the normalization and scaling can be combined into a single run using "SCTransform"
+pbmc<-SCTransform(pbmc, vars.to.regress =c("percent.mt","nCount_RNA","CC.Difference"),return.only.var.genes = TRUE, verbose = FALSE) 
+# default: return.only.var.genes = TRUE, can change to FALSE if you want to keep all genes for other use.
+```
+
+Saving checkpoint...
+```{r eval=F}
+saveRDS(pbmc,file="pbmc_norm.rds")
+```
+
+
+
+
+
+
+
+
+

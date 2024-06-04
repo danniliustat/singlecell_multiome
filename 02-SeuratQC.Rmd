@@ -1,7 +1,34 @@
-# Load data and create Seurat objects{#seuratqc}
+# Obtain data and perform QC using Seurat{#seuratqc}
+
+
+## Download data
+
+The PBMC multiome dataset is available from [10x genomics](https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k). The website contains output files from CelL Ranger ARC. Please go to the above website and make sure you download the following files to your data folder:
+
+* Filtered feature barcode matrix (HDF5)
+* ATAC Per fragment information file (TSV.GZ)
+* ATAC Per fragment information index (TSV.GZ index)
+
+In Terminal window:
+```{bash eval=FALSE}
+cd ~/pbmc_data
+# download data
+wget https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5
+wget https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz
+wget https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz.tbi
+
+# check files
+ls
+```
+
+## Load data in R and construct Seurat object
+
+For the following processing and analysis steps, we are going to use `Seurat` and its sister package `Signac`. `Seurat` is a popular package in R that provides users with well-curated functions and workflows. Seurat was first developed for the clustering of scRNA-seq data, but with continuing updates in the last few years, this package has become a popular tool for QC, analysis, and exploration of scRNA-seq data as well. For more information on `Seurat`, see the [Seurat website](https://satijalab.org/seurat/) from the Satija Lab, which has very nice documentation and links to the Satija Lab [publications](https://satijalab.org/publications) as well as detailed [tutorials and vignettes](https://satijalab.org/seurat/vignettes.html).
+
+In this notebook, we will use the most recent version of Seurat, version 5.
 
 We first load all required libraries in this tutorial.
-```{r eval=TRUE,results='hide'}
+```{r eval=TRUE,results=FALSE,warning=FALSE,message=FALSE}
 library(Seurat)
 library(SeuratData)
 library(Signac)
@@ -9,41 +36,144 @@ library(BSgenome.Hsapiens.UCSC.hg38)
 library(EnsDb.Hsapiens.v86)
 library(ggplot2)
 library(cowplot)
+library(hdf5r)
+library(dplyr)
+library(patchwork)
+```
+
+Also set working directory to the folder where you saved your downloaded datasets.
+```{r eval=FALSE}
+# check current working directory
+getwd()
+
+# set working directory
+setwd("/path/to/pbmc_data")
+getwd() # check again
 ```
 
 
-The PBMC multiome data was built in the `SeuratData` package and was stored in a SeuratObject already, so we can download the data and directly start analyzing.
-```{r eval=TRUE,echo=FALSE}
-# install the dataset and load requirements
-options(timeout=600) # extend download time limit
-InstallData("pbmcMultiome")
-# this will take ~5mins
+Next, we will read in the `.h5` file into R and construct Seurat Object with both scRNA-seq and scATAC-seq assays.
+```{r eval=F,results='markup',warning=FALSE,message=FALSE}
+# the 10x hdf5 file contains both data types. 
+inputdata.10x <- Read10X_h5("pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5")
+# extract RNA and ATAC data
+rna_counts <- inputdata.10x$`Gene Expression`
+atac_counts <- inputdata.10x$Peaks
+
+## if reading files from "filtered_feature_bc_matrix"
+# inputdata.10x <- Read10X(data.dir = "filtered_feature_bc_matrix")
+
 ```
 
-If you have your own output files (.csv or .h5) from CellRanger ARC, you need to read the count matrix into R and construct Seurat Objects first. Below is an examples for constructing `SeuratObject`.
+```{r eval=F,results='markup',warning=FALSE,message=FALSE}
+# Create Seurat object
+pbmc <- CreateSeuratObject(counts = rna_counts,project="pbmc")
+
+# Now add in the ATAC-seq data
+# we'll only use peaks in standard chromosomes
+grange.counts <- StringToGRanges(rownames(atac_counts), sep = c(":", "-"))
+grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
+atac_counts <- atac_counts[as.vector(grange.use), ]
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
+seqlevelsStyle(annotations) <- 'UCSC'
+genome(annotations) <- "hg38"
+
+frag.file <- "pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz"
+chrom_assay <- CreateChromatinAssay(
+   counts = atac_counts,
+   sep = c(":", "-"),
+   genome = 'hg38',
+   fragments = frag.file,
+   min.cells = 10,
+   annotation = annotations
+ )
+pbmc[["ATAC"]] <- chrom_assay
+
+# check data
+pbmc
+```
+
+Add something about seurat object structure
+Explore Seurat Objects using `@` or `$`
+```{r eval=FALSE}
+# check available assays in data
+pbmc@active.assay
+
+#check a single assay
+pbmc[["RNA"]]
+pbmc[["ATAC"]]
+
+# check elements within each assay
+
+pbmc[["RNA"]]$counts
+
+# check metadata
+pbmc@meta.data
+```
+
+Saving data periodically to preserve Seurat results. Output data can be large.
+
+```{r eval=F, echo=F}
+saveRDS(pbmc,file="pbmc.rds")
+```
+
+## Perform quality control using both assays
+```{r eval=T,echo=F}
+pbmc<-readRDS("../pbmc_data/pbmc.rds")
+```
+
+Using `DefaultAssay()` to specify the assay you want to work on.
+
+```{r eval=FALSE,warning=FALSE,message=FALSE}
+# calculate percentage of mitochondrial genes in each cell
+DefaultAssay(pbmc) <- "RNA"
+pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
+DefaultAssay(pbmc) <- "ATAC"
+pbmc <- NucleosomeSignal(pbmc)
+pbmc <- TSSEnrichment(pbmc)
+
+DensityScatter(pbmc, x = 'nCount_ATAC', y = 'TSS.enrichment', log_x = TRUE, quantiles = TRUE)
+
+# generate violin plot
+VlnPlot(pbmc, features = c( "nCount_RNA", "nFeature_RNA", "percent.mt"), ncol = 3,
+  log = TRUE, pt.size = 0) + NoLegend()
+VlnPlot(pbmc, features = c("nCount_ATAC", "TSS.enrichment", "nucleosome_signal"), ncol = 3,
+  log = TRUE, pt.size = 0) + NoLegend()
+# change pt.size to show scatter p
+```
+
+```{r eval=T,fig.cap='Voilin plot for QC', out.width='100%', fig.asp=.75, fig.align='center'}
+# show plot
+VlnPlot(pbmc, features = c( "nCount_RNA", "nFeature_RNA", "percent.mt"), ncol = 3,
+  log = TRUE, pt.size = 0) + NoLegend()
+VlnPlot(pbmc, features = c("nCount_ATAC", "TSS.enrichment", "nucleosome_signal"), ncol = 3,
+  log = TRUE, pt.size = 0) + NoLegend()
+```
+
+
+
+```{r eval=FALSE,warning=FALSE,message=FALSE}
+# play with different filtering cutoffs to see how number of cells change
+pbmc <- subset(
+  x = pbmc,
+  subset = nCount_ATAC < 7e4 &
+    nCount_ATAC > 5e3 &
+    nCount_RNA < 25000 &
+    nCount_RNA > 1000 &
+    percent.mt < 25 &
+    nucleosome_signal < 2 &
+    TSS.enrichment > 1
+)
+
+pbmc
+
+```
+
+Saving data periodically to preserve Seurat results. Output data can be large.
 
 ```{r eval=F}
-
+saveRDS(pbmc,file="pbmc_qc.rds")
 ```
-
-
-```{r eval=FALSE}
-# load both modalities
-pbmc.rna <- LoadData("pbmcMultiome", "pbmc.rna")
-pbmc.atac <- LoadData("pbmcMultiome", "pbmc.atac")
-
-pbmc.rna[["RNA"]] <- as(pbmc.rna[["RNA"]], Class = "Assay5")
-# repeat QC steps performed in the WNN vignette
-pbmc.rna <- subset(pbmc.rna, seurat_annotations != "filtered")
-pbmc.atac <- subset(pbmc.atac, seurat_annotations != "filtered")
-
-```
-
-
-
-
-
-
 *******
 
 You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).

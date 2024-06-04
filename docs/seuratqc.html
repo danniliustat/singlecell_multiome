@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Load data and create Seurat objects | Hands-on Analysis on Single Cell Multiome</title>
+  <title>Chapter 3 Obtain data and perform QC using Seurat | Hands-on Analysis on Single Cell Multiome</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Load data and create Seurat objects | Hands-on Analysis on Single Cell Multiome" />
+  <meta property="og:title" content="Chapter 3 Obtain data and perform QC using Seurat | Hands-on Analysis on Single Cell Multiome" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Load data and create Seurat objects | Hands-on Analysis on Single Cell Multiome" />
+  <meta name="twitter:title" content="Chapter 3 Obtain data and perform QC using Seurat | Hands-on Analysis on Single Cell Multiome" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Danni Liu" />
 
 
-<meta name="date" content="2024-06-03" />
+<meta name="date" content="2024-06-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="cellranger_arc.html"/>
-<link rel="next" href="methods.html"/>
+<link rel="next" href="normalization-and-cell-cycle-correction.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -166,29 +166,44 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#about-data"><i class="fa fa-check"></i><b>1.1</b> About Data</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Environment requirements</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#construct-folder-structure-in-hpc3"><i class="fa fa-check"></i><b>1.3</b> Construct folder structure in HPC3</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#server-environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Server environment requirements</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#r-libraries"><i class="fa fa-check"></i><b>1.3</b> R libraries</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#construct-folder-structure"><i class="fa fa-check"></i><b>1.4</b> Construct folder structure</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="cellranger_arc.html"><a href="cellranger_arc.html"><i class="fa fa-check"></i><b>2</b> Cell Ranger ARC for preprocessing sequencing data</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="cellranger_arc.html"><a href="cellranger_arc.html#bcl-naming-convention-and-csv-sample-sheet"><i class="fa fa-check"></i><b>2.1</b> BCL naming convention and CSV sample sheet</a></li>
-<li class="chapter" data-level="2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-mkfastq"><i class="fa fa-check"></i><b>2.2</b> <code>cellranger-arc mkfastq</code></a>
+<li class="chapter" data-level="2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-mkfastq"><i class="fa fa-check"></i><b>2.2</b> <code>cellranger-arc mkfastq</code></a></li>
+<li class="chapter" data-level="2.3" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-count"><i class="fa fa-check"></i><b>2.3</b> <code>cellranger-arc count</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="seuratqc.html"><a href="seuratqc.html"><i class="fa fa-check"></i><b>3</b> Obtain data and perform QC using Seurat</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="cellranger_arc.html"><a href="cellranger_arc.html#demultiplexing"><i class="fa fa-check"></i><b>2.2.1</b> Demultiplexing</a></li>
-<li class="chapter" data-level="2.2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#example-codes"><i class="fa fa-check"></i><b>2.2.2</b> Example codes</a></li>
+<li class="chapter" data-level="3.1" data-path="seuratqc.html"><a href="seuratqc.html#download-data"><i class="fa fa-check"></i><b>3.1</b> Download data</a></li>
+<li class="chapter" data-level="3.2" data-path="seuratqc.html"><a href="seuratqc.html#load-data-in-r-and-construct-seurat-object"><i class="fa fa-check"></i><b>3.2</b> Load data in R and construct Seurat object</a></li>
+<li class="chapter" data-level="3.3" data-path="seuratqc.html"><a href="seuratqc.html#perform-quality-control-using-both-assays"><i class="fa fa-check"></i><b>3.3</b> Perform quality control using both assays</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="seuratqc.html"><a href="seuratqc.html"><i class="fa fa-check"></i><b>3</b> Load data and create Seurat objects</a></li>
-<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a>
+<li class="chapter" data-level="4" data-path="normalization-and-cell-cycle-correction.html"><a href="normalization-and-cell-cycle-correction.html"><i class="fa fa-check"></i><b>4</b> Normalization and cell cycle correction</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="methods.html"><a href="methods.html#math-example"><i class="fa fa-check"></i><b>4.1</b> math example</a></li>
+<li class="chapter" data-level="4.1" data-path="normalization-and-cell-cycle-correction.html"><a href="normalization-and-cell-cycle-correction.html#normalization"><i class="fa fa-check"></i><b>4.1</b> Normalization</a></li>
+<li class="chapter" data-level="4.2" data-path="normalization-and-cell-cycle-correction.html"><a href="normalization-and-cell-cycle-correction.html#cell-cycle-correction-and-scale-data"><i class="fa fa-check"></i><b>4.2</b> Cell cycle correction and scale data</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
+<li class="chapter" data-level="5" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html"><i class="fa fa-check"></i><b>5</b> Dimension reduction and clustering</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
-<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+<li class="chapter" data-level="5.1" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#identify-top-variable-features"><i class="fa fa-check"></i><b>5.1</b> Identify top variable features</a></li>
+<li class="chapter" data-level="5.2" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#dimension-reduction"><i class="fa fa-check"></i><b>5.2</b> Dimension reduction</a></li>
+<li class="chapter" data-level="5.3" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#clustering-and-joint-clustering"><i class="fa fa-check"></i><b>5.3</b> Clustering and joint clustering</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="6" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>6</b> Applications</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>6.1</b> Example one</a></li>
+<li class="chapter" data-level="6.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>6.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="applications-1.html"><a href="applications-1.html"><i class="fa fa-check"></i><b>7</b> Applications</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="applications-1.html"><a href="applications-1.html#example-one-1"><i class="fa fa-check"></i><b>7.1</b> Example one</a></li>
+<li class="chapter" data-level="7.2" data-path="applications-1.html"><a href="applications-1.html#example-two-1"><i class="fa fa-check"></i><b>7.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data-integration.html"><a href="data-integration.html"><i class="fa fa-check"></i><b>8</b> Data integration</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -211,121 +226,164 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="seuratqc" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Load data and create Seurat objects<a href="seuratqc.html#seuratqc" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">Chapter 3</span> Obtain data and perform QC using Seurat<a href="seuratqc.html#seuratqc" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="download-data" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Download data<a href="seuratqc.html#download-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The PBMC multiome dataset is available from <a href="https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k">10x genomics</a>. The website contains output files from CelL Ranger ARC. Please go to the above website and make sure you download the following files to your data folder:</p>
+<ul>
+<li>Filtered feature barcode matrix (HDF5)</li>
+<li>ATAC Per fragment information file (TSV.GZ)</li>
+<li>ATAC Per fragment information index (TSV.GZ index)</li>
+</ul>
+<p>In Terminal window:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="seuratqc.html#cb1-1" tabindex="-1"></a><span class="bu">cd</span> ~/pbmc_data</span>
+<span id="cb1-2"><a href="seuratqc.html#cb1-2" tabindex="-1"></a><span class="co"># download data</span></span>
+<span id="cb1-3"><a href="seuratqc.html#cb1-3" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5</span>
+<span id="cb1-4"><a href="seuratqc.html#cb1-4" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz</span>
+<span id="cb1-5"><a href="seuratqc.html#cb1-5" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz.tbi</span>
+<span id="cb1-6"><a href="seuratqc.html#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="seuratqc.html#cb1-7" tabindex="-1"></a><span class="co"># check files</span></span>
+<span id="cb1-8"><a href="seuratqc.html#cb1-8" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
+</div>
+<div id="load-data-in-r-and-construct-seurat-object" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Load data in R and construct Seurat object<a href="seuratqc.html#load-data-in-r-and-construct-seurat-object" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For the following processing and analysis steps, we are going to use <code>Seurat</code> and its sister package <code>Signac</code>. <code>Seurat</code> is a popular package in R that provides users with well-curated functions and workflows. Seurat was first developed for the clustering of scRNA-seq data, but with continuing updates in the last few years, this package has become a popular tool for QC, analysis, and exploration of scRNA-seq data as well. For more information on <code>Seurat</code>, see the <a href="https://satijalab.org/seurat/">Seurat website</a> from the Satija Lab, which has very nice documentation and links to the Satija Lab <a href="https://satijalab.org/publications">publications</a> as well as detailed <a href="https://satijalab.org/seurat/vignettes.html">tutorials and vignettes</a>.</p>
+<p>In this notebook, we will use the most recent version of Seurat, version 5.</p>
 <p>We first load all required libraries in this tutorial.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="seuratqc.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span></code></pre></div>
-<pre><code>## Loading required package: SeuratObject</code></pre>
-<pre><code>## Loading required package: sp</code></pre>
-<pre><code>## 
-## Attaching package: &#39;SeuratObject&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, t</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="seuratqc.html#cb6-1" tabindex="-1"></a><span class="fu">library</span>(SeuratData)</span></code></pre></div>
-<pre><code>## ── Installed datasets ──────────────────────────────── SeuratData v0.2.2.9001 ──</code></pre>
-<pre><code>## ✔ pbmcMultiome 0.1.4</code></pre>
-<pre><code>## ────────────────────────────────────── Key ─────────────────────────────────────</code></pre>
-<pre><code>## ✔ Dataset loaded successfully
-## ❯ Dataset built with a newer version of Seurat than installed
-## ❓ Unknown version of Seurat installed</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="seuratqc.html#cb11-1" tabindex="-1"></a><span class="fu">library</span>(Signac)</span>
-<span id="cb11-2"><a href="seuratqc.html#cb11-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&#39;BSgenome.Hsapiens.UCSC.hg38&#39;</span>) </span></code></pre></div>
-<pre><code>## Loading required package: GenomeInfoDb</code></pre>
-<pre><code>## Loading required package: BiocGenerics</code></pre>
-<pre><code>## 
-## Attaching package: &#39;BiocGenerics&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:SeuratObject&#39;:
-## 
-##     intersect</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     IQR, mad, sd, var, xtabs</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
-##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
-##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
-##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-##     Position, rank, rbind, Reduce, rownames, sapply, setdiff, table,
-##     tapply, union, unique, unsplit, which.max, which.min</code></pre>
-<pre><code>## Loading required package: S4Vectors</code></pre>
-<pre><code>## Loading required package: stats4</code></pre>
-<pre><code>## 
-## Attaching package: &#39;S4Vectors&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:utils&#39;:
-## 
-##     findMatches</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     expand.grid, I, unname</code></pre>
-<pre><code>## Loading required package: IRanges</code></pre>
-<pre><code>## 
-## Attaching package: &#39;IRanges&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:sp&#39;:
-## 
-##     %over%</code></pre>
-<pre><code>## Loading required package: BSgenome</code></pre>
-<pre><code>## Loading required package: GenomicRanges</code></pre>
-<pre><code>## Loading required package: Biostrings</code></pre>
-<pre><code>## Loading required package: XVector</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Biostrings&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     strsplit</code></pre>
-<pre><code>## Loading required package: BiocIO</code></pre>
-<pre><code>## Loading required package: rtracklayer</code></pre>
-<pre><code>## 
-## Attaching package: &#39;rtracklayer&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:BiocIO&#39;:
-## 
-##     FileForFormat</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="seuratqc.html#cb36-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&#39;EnsDb.Hsapiens.v86&#39;</span>)</span></code></pre></div>
-<pre><code>## Loading required package: ensembldb</code></pre>
-<pre><code>## Loading required package: GenomicFeatures</code></pre>
-<pre><code>## Loading required package: AnnotationDbi</code></pre>
-<pre><code>## Loading required package: Biobase</code></pre>
-<pre><code>## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
-##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
-<pre><code>## Loading required package: AnnotationFilter</code></pre>
-<pre><code>## 
-## Attaching package: &#39;ensembldb&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="seuratqc.html#cb45-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb45-2"><a href="seuratqc.html#cb45-2" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span></code></pre></div>
-<p>The PBMC multiome data was built in the <code>SeuratData</code> package and was stored in a SeuratObject already, so we can download the data and directly start analyzing.</p>
-<pre><code>## Warning: The following packages are already installed and will not be
-## reinstalled: pbmcMultiome</code></pre>
-<p>If you have your own output files (.csv or .h5) from CellRanger ARC, you need to read the count matrix into R and construct Seurat Objects first. Below is an examples for constructing <code>SeuratObject</code>.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="seuratqc.html#cb47-1" tabindex="-1"></a><span class="co"># load both modalities</span></span>
-<span id="cb47-2"><a href="seuratqc.html#cb47-2" tabindex="-1"></a>pbmc.rna <span class="ot">&lt;-</span> <span class="fu">LoadData</span>(<span class="st">&quot;pbmcMultiome&quot;</span>, <span class="st">&quot;pbmc.rna&quot;</span>)</span>
-<span id="cb47-3"><a href="seuratqc.html#cb47-3" tabindex="-1"></a>pbmc.atac <span class="ot">&lt;-</span> <span class="fu">LoadData</span>(<span class="st">&quot;pbmcMultiome&quot;</span>, <span class="st">&quot;pbmc.atac&quot;</span>)</span>
-<span id="cb47-4"><a href="seuratqc.html#cb47-4" tabindex="-1"></a></span>
-<span id="cb47-5"><a href="seuratqc.html#cb47-5" tabindex="-1"></a>pbmc.rna[[<span class="st">&quot;RNA&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">as</span>(pbmc.rna[[<span class="st">&quot;RNA&quot;</span>]], <span class="at">Class =</span> <span class="st">&quot;Assay5&quot;</span>)</span>
-<span id="cb47-6"><a href="seuratqc.html#cb47-6" tabindex="-1"></a><span class="co"># repeat QC steps performed in the WNN vignette</span></span>
-<span id="cb47-7"><a href="seuratqc.html#cb47-7" tabindex="-1"></a>pbmc.rna <span class="ot">&lt;-</span> <span class="fu">subset</span>(pbmc.rna, seurat_annotations <span class="sc">!=</span> <span class="st">&quot;filtered&quot;</span>)</span>
-<span id="cb47-8"><a href="seuratqc.html#cb47-8" tabindex="-1"></a>pbmc.atac <span class="ot">&lt;-</span> <span class="fu">subset</span>(pbmc.atac, seurat_annotations <span class="sc">!=</span> <span class="st">&quot;filtered&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="seuratqc.html#cb2-1" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb2-2"><a href="seuratqc.html#cb2-2" tabindex="-1"></a><span class="fu">library</span>(SeuratData)</span>
+<span id="cb2-3"><a href="seuratqc.html#cb2-3" tabindex="-1"></a><span class="fu">library</span>(Signac)</span>
+<span id="cb2-4"><a href="seuratqc.html#cb2-4" tabindex="-1"></a><span class="fu">library</span>(BSgenome.Hsapiens.UCSC.hg38) </span>
+<span id="cb2-5"><a href="seuratqc.html#cb2-5" tabindex="-1"></a><span class="fu">library</span>(EnsDb.Hsapiens.v86)</span>
+<span id="cb2-6"><a href="seuratqc.html#cb2-6" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-7"><a href="seuratqc.html#cb2-7" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb2-8"><a href="seuratqc.html#cb2-8" tabindex="-1"></a><span class="fu">library</span>(hdf5r)</span>
+<span id="cb2-9"><a href="seuratqc.html#cb2-9" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-10"><a href="seuratqc.html#cb2-10" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
+<p>Also set working directory to the folder where you saved your downloaded datasets.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="seuratqc.html#cb3-1" tabindex="-1"></a><span class="co"># check current working directory</span></span>
+<span id="cb3-2"><a href="seuratqc.html#cb3-2" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb3-3"><a href="seuratqc.html#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="seuratqc.html#cb3-4" tabindex="-1"></a><span class="co"># set working directory</span></span>
+<span id="cb3-5"><a href="seuratqc.html#cb3-5" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;/path/to/pbmc_data&quot;</span>)</span>
+<span id="cb3-6"><a href="seuratqc.html#cb3-6" tabindex="-1"></a><span class="fu">getwd</span>() <span class="co"># check again</span></span></code></pre></div>
+<p>Next, we will read in the <code>.h5</code> file into R and construct Seurat Object with both scRNA-seq and scATAC-seq assays.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="seuratqc.html#cb4-1" tabindex="-1"></a><span class="co"># the 10x hdf5 file contains both data types. </span></span>
+<span id="cb4-2"><a href="seuratqc.html#cb4-2" tabindex="-1"></a>inputdata<span class="fl">.10</span>x <span class="ot">&lt;-</span> <span class="fu">Read10X_h5</span>(<span class="st">&quot;pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5&quot;</span>)</span>
+<span id="cb4-3"><a href="seuratqc.html#cb4-3" tabindex="-1"></a><span class="co"># extract RNA and ATAC data</span></span>
+<span id="cb4-4"><a href="seuratqc.html#cb4-4" tabindex="-1"></a>rna_counts <span class="ot">&lt;-</span> inputdata<span class="fl">.10</span>x<span class="sc">$</span><span class="st">`</span><span class="at">Gene Expression</span><span class="st">`</span></span>
+<span id="cb4-5"><a href="seuratqc.html#cb4-5" tabindex="-1"></a>atac_counts <span class="ot">&lt;-</span> inputdata<span class="fl">.10</span>x<span class="sc">$</span>Peaks</span>
+<span id="cb4-6"><a href="seuratqc.html#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="seuratqc.html#cb4-7" tabindex="-1"></a><span class="do">## if reading files from &quot;filtered_feature_bc_matrix&quot;</span></span>
+<span id="cb4-8"><a href="seuratqc.html#cb4-8" tabindex="-1"></a><span class="co"># inputdata.10x &lt;- Read10X(data.dir = &quot;filtered_feature_bc_matrix&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="seuratqc.html#cb5-1" tabindex="-1"></a><span class="co"># Create Seurat object</span></span>
+<span id="cb5-2"><a href="seuratqc.html#cb5-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">CreateSeuratObject</span>(<span class="at">counts =</span> rna_counts,<span class="at">project=</span><span class="st">&quot;pbmc&quot;</span>)</span>
+<span id="cb5-3"><a href="seuratqc.html#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="seuratqc.html#cb5-4" tabindex="-1"></a><span class="co"># Now add in the ATAC-seq data</span></span>
+<span id="cb5-5"><a href="seuratqc.html#cb5-5" tabindex="-1"></a><span class="co"># we&#39;ll only use peaks in standard chromosomes</span></span>
+<span id="cb5-6"><a href="seuratqc.html#cb5-6" tabindex="-1"></a>grange.counts <span class="ot">&lt;-</span> <span class="fu">StringToGRanges</span>(<span class="fu">rownames</span>(atac_counts), <span class="at">sep =</span> <span class="fu">c</span>(<span class="st">&quot;:&quot;</span>, <span class="st">&quot;-&quot;</span>))</span>
+<span id="cb5-7"><a href="seuratqc.html#cb5-7" tabindex="-1"></a>grange.use <span class="ot">&lt;-</span> <span class="fu">seqnames</span>(grange.counts) <span class="sc">%in%</span> <span class="fu">standardChromosomes</span>(grange.counts)</span>
+<span id="cb5-8"><a href="seuratqc.html#cb5-8" tabindex="-1"></a>atac_counts <span class="ot">&lt;-</span> atac_counts[<span class="fu">as.vector</span>(grange.use), ]</span>
+<span id="cb5-9"><a href="seuratqc.html#cb5-9" tabindex="-1"></a>annotations <span class="ot">&lt;-</span> <span class="fu">GetGRangesFromEnsDb</span>(<span class="at">ensdb =</span> EnsDb.Hsapiens.v86)</span>
+<span id="cb5-10"><a href="seuratqc.html#cb5-10" tabindex="-1"></a><span class="fu">seqlevelsStyle</span>(annotations) <span class="ot">&lt;-</span> <span class="st">&#39;UCSC&#39;</span></span>
+<span id="cb5-11"><a href="seuratqc.html#cb5-11" tabindex="-1"></a><span class="fu">genome</span>(annotations) <span class="ot">&lt;-</span> <span class="st">&quot;hg38&quot;</span></span>
+<span id="cb5-12"><a href="seuratqc.html#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="seuratqc.html#cb5-13" tabindex="-1"></a>frag.file <span class="ot">&lt;-</span> <span class="st">&quot;pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz&quot;</span></span>
+<span id="cb5-14"><a href="seuratqc.html#cb5-14" tabindex="-1"></a>chrom_assay <span class="ot">&lt;-</span> <span class="fu">CreateChromatinAssay</span>(</span>
+<span id="cb5-15"><a href="seuratqc.html#cb5-15" tabindex="-1"></a>   <span class="at">counts =</span> atac_counts,</span>
+<span id="cb5-16"><a href="seuratqc.html#cb5-16" tabindex="-1"></a>   <span class="at">sep =</span> <span class="fu">c</span>(<span class="st">&quot;:&quot;</span>, <span class="st">&quot;-&quot;</span>),</span>
+<span id="cb5-17"><a href="seuratqc.html#cb5-17" tabindex="-1"></a>   <span class="at">genome =</span> <span class="st">&#39;hg38&#39;</span>,</span>
+<span id="cb5-18"><a href="seuratqc.html#cb5-18" tabindex="-1"></a>   <span class="at">fragments =</span> frag.file,</span>
+<span id="cb5-19"><a href="seuratqc.html#cb5-19" tabindex="-1"></a>   <span class="at">min.cells =</span> <span class="dv">10</span>,</span>
+<span id="cb5-20"><a href="seuratqc.html#cb5-20" tabindex="-1"></a>   <span class="at">annotation =</span> annotations</span>
+<span id="cb5-21"><a href="seuratqc.html#cb5-21" tabindex="-1"></a> )</span>
+<span id="cb5-22"><a href="seuratqc.html#cb5-22" tabindex="-1"></a>pbmc[[<span class="st">&quot;ATAC&quot;</span>]] <span class="ot">&lt;-</span> chrom_assay</span>
+<span id="cb5-23"><a href="seuratqc.html#cb5-23" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="seuratqc.html#cb5-24" tabindex="-1"></a><span class="co"># check data</span></span>
+<span id="cb5-25"><a href="seuratqc.html#cb5-25" tabindex="-1"></a>pbmc</span></code></pre></div>
+<p>Add something about seurat object structure
+Explore Seurat Objects using <code>@</code> or <code>$</code></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="seuratqc.html#cb6-1" tabindex="-1"></a><span class="co"># check available assays in data</span></span>
+<span id="cb6-2"><a href="seuratqc.html#cb6-2" tabindex="-1"></a>pbmc<span class="sc">@</span>active.assay</span>
+<span id="cb6-3"><a href="seuratqc.html#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="seuratqc.html#cb6-4" tabindex="-1"></a><span class="co">#check a single assay</span></span>
+<span id="cb6-5"><a href="seuratqc.html#cb6-5" tabindex="-1"></a>pbmc[[<span class="st">&quot;RNA&quot;</span>]]</span>
+<span id="cb6-6"><a href="seuratqc.html#cb6-6" tabindex="-1"></a>pbmc[[<span class="st">&quot;ATAC&quot;</span>]]</span>
+<span id="cb6-7"><a href="seuratqc.html#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="seuratqc.html#cb6-8" tabindex="-1"></a><span class="co"># check elements within each assay</span></span>
+<span id="cb6-9"><a href="seuratqc.html#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="seuratqc.html#cb6-10" tabindex="-1"></a>pbmc[[<span class="st">&quot;RNA&quot;</span>]]<span class="sc">$</span>counts</span>
+<span id="cb6-11"><a href="seuratqc.html#cb6-11" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="seuratqc.html#cb6-12" tabindex="-1"></a><span class="co"># check metadata</span></span>
+<span id="cb6-13"><a href="seuratqc.html#cb6-13" tabindex="-1"></a>pbmc<span class="sc">@</span>meta.data</span></code></pre></div>
+<p>Saving data periodically to preserve Seurat results. Output data can be large.</p>
+</div>
+<div id="perform-quality-control-using-both-assays" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Perform quality control using both assays<a href="seuratqc.html#perform-quality-control-using-both-assays" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using <code>DefaultAssay()</code> to specify the assay you want to work on.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="seuratqc.html#cb7-1" tabindex="-1"></a><span class="co"># calculate percentage of mitochondrial genes in each cell</span></span>
+<span id="cb7-2"><a href="seuratqc.html#cb7-2" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
+<span id="cb7-3"><a href="seuratqc.html#cb7-3" tabindex="-1"></a>pbmc[[<span class="st">&quot;percent.mt&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">PercentageFeatureSet</span>(pbmc, <span class="at">pattern =</span> <span class="st">&quot;^MT-&quot;</span>)</span>
+<span id="cb7-4"><a href="seuratqc.html#cb7-4" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;ATAC&quot;</span></span>
+<span id="cb7-5"><a href="seuratqc.html#cb7-5" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">NucleosomeSignal</span>(pbmc)</span>
+<span id="cb7-6"><a href="seuratqc.html#cb7-6" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">TSSEnrichment</span>(pbmc)</span>
+<span id="cb7-7"><a href="seuratqc.html#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="seuratqc.html#cb7-8" tabindex="-1"></a><span class="fu">DensityScatter</span>(pbmc, <span class="at">x =</span> <span class="st">&#39;nCount_ATAC&#39;</span>, <span class="at">y =</span> <span class="st">&#39;TSS.enrichment&#39;</span>, <span class="at">log_x =</span> <span class="cn">TRUE</span>, <span class="at">quantiles =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-9"><a href="seuratqc.html#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="seuratqc.html#cb7-10" tabindex="-1"></a><span class="co"># generate violin plot</span></span>
+<span id="cb7-11"><a href="seuratqc.html#cb7-11" tabindex="-1"></a><span class="fu">VlnPlot</span>(pbmc, <span class="at">features =</span> <span class="fu">c</span>( <span class="st">&quot;nCount_RNA&quot;</span>, <span class="st">&quot;nFeature_RNA&quot;</span>, <span class="st">&quot;percent.mt&quot;</span>), <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb7-12"><a href="seuratqc.html#cb7-12" tabindex="-1"></a>  <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb7-13"><a href="seuratqc.html#cb7-13" tabindex="-1"></a><span class="fu">VlnPlot</span>(pbmc, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nCount_ATAC&quot;</span>, <span class="st">&quot;TSS.enrichment&quot;</span>, <span class="st">&quot;nucleosome_signal&quot;</span>), <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb7-14"><a href="seuratqc.html#cb7-14" tabindex="-1"></a>  <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb7-15"><a href="seuratqc.html#cb7-15" tabindex="-1"></a><span class="co"># change pt.size to show scatter p</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="seuratqc.html#cb8-1" tabindex="-1"></a><span class="co"># show plot</span></span>
+<span id="cb8-2"><a href="seuratqc.html#cb8-2" tabindex="-1"></a><span class="fu">VlnPlot</span>(pbmc, <span class="at">features =</span> <span class="fu">c</span>( <span class="st">&quot;nCount_RNA&quot;</span>, <span class="st">&quot;nFeature_RNA&quot;</span>, <span class="st">&quot;percent.mt&quot;</span>), <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb8-3"><a href="seuratqc.html#cb8-3" tabindex="-1"></a>  <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10-1"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-10-1.png" alt="Voilin plot for QC" width="100%" />
+<p class="caption">
+Figure 3.1: Voilin plot for QC
+</p>
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="seuratqc.html#cb9-1" tabindex="-1"></a><span class="fu">VlnPlot</span>(pbmc, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nCount_ATAC&quot;</span>, <span class="st">&quot;TSS.enrichment&quot;</span>, <span class="st">&quot;nucleosome_signal&quot;</span>), <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb9-2"><a href="seuratqc.html#cb9-2" tabindex="-1"></a>  <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10-2"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-10-2.png" alt="Voilin plot for QC" width="100%" />
+<p class="caption">
+Figure 3.2: Voilin plot for QC
+</p>
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="seuratqc.html#cb10-1" tabindex="-1"></a><span class="co"># play with different filtering cutoffs to see how number of cells change</span></span>
+<span id="cb10-2"><a href="seuratqc.html#cb10-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
+<span id="cb10-3"><a href="seuratqc.html#cb10-3" tabindex="-1"></a>  <span class="at">x =</span> pbmc,</span>
+<span id="cb10-4"><a href="seuratqc.html#cb10-4" tabindex="-1"></a>  <span class="at">subset =</span> nCount_ATAC <span class="sc">&lt;</span> <span class="fl">7e4</span> <span class="sc">&amp;</span></span>
+<span id="cb10-5"><a href="seuratqc.html#cb10-5" tabindex="-1"></a>    nCount_ATAC <span class="sc">&gt;</span> <span class="fl">5e3</span> <span class="sc">&amp;</span></span>
+<span id="cb10-6"><a href="seuratqc.html#cb10-6" tabindex="-1"></a>    nCount_RNA <span class="sc">&lt;</span> <span class="dv">25000</span> <span class="sc">&amp;</span></span>
+<span id="cb10-7"><a href="seuratqc.html#cb10-7" tabindex="-1"></a>    nCount_RNA <span class="sc">&gt;</span> <span class="dv">1000</span> <span class="sc">&amp;</span></span>
+<span id="cb10-8"><a href="seuratqc.html#cb10-8" tabindex="-1"></a>    percent.mt <span class="sc">&lt;</span> <span class="dv">25</span> <span class="sc">&amp;</span></span>
+<span id="cb10-9"><a href="seuratqc.html#cb10-9" tabindex="-1"></a>    nucleosome_signal <span class="sc">&lt;</span> <span class="dv">2</span> <span class="sc">&amp;</span></span>
+<span id="cb10-10"><a href="seuratqc.html#cb10-10" tabindex="-1"></a>    TSS.enrichment <span class="sc">&gt;</span> <span class="dv">1</span></span>
+<span id="cb10-11"><a href="seuratqc.html#cb10-11" tabindex="-1"></a>)</span>
+<span id="cb10-12"><a href="seuratqc.html#cb10-12" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="seuratqc.html#cb10-13" tabindex="-1"></a>pbmc</span></code></pre></div>
+<p>Saving data periodically to preserve Seurat results. Output data can be large.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="seuratqc.html#cb11-1" tabindex="-1"></a><span class="fu">saveRDS</span>(pbmc,<span class="at">file=</span><span class="st">&quot;pbmc_qc.rds&quot;</span>)</span></code></pre></div>
 <hr />
-<p>You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="#intro"><strong>??</strong></a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="methods.html#methods">4</a>.</p>
+<p>You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="#intro"><strong>??</strong></a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="#methods"><strong>??</strong></a>.</p>
 <p>Figures and tables with captions will be placed in <code>figure</code> and <code>table</code> environments, respectively.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="seuratqc.html#cb48-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, .<span class="dv">1</span>, .<span class="dv">1</span>))</span>
-<span id="cb48-2"><a href="seuratqc.html#cb48-2" tabindex="-1"></a><span class="fu">plot</span>(pressure, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="seuratqc.html#cb12-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, .<span class="dv">1</span>, .<span class="dv">1</span>))</span>
+<span id="cb12-2"><a href="seuratqc.html#cb12-2" tabindex="-1"></a><span class="fu">plot</span>(pressure, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:nice-fig"></span>
 <img src="bookdown-demo_files/figure-html/nice-fig-1.png" alt="Here is a nice figure!" width="80%" />
 <p class="caption">
-Figure 3.1: Here is a nice figure!
+Figure 3.3: Here is a nice figure!
 </p>
 </div>
-<p>Reference a figure by its code chunk label with the <code>fig:</code> prefix, e.g., see Figure <a href="seuratqc.html#fig:nice-fig">3.1</a>. Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="seuratqc.html#tab:nice-tab">3.1</a>.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="seuratqc.html#cb49-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb49-2"><a href="seuratqc.html#cb49-2" tabindex="-1"></a>  <span class="fu">head</span>(iris, <span class="dv">20</span>), <span class="at">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
-<span id="cb49-3"><a href="seuratqc.html#cb49-3" tabindex="-1"></a>  <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
-<span id="cb49-4"><a href="seuratqc.html#cb49-4" tabindex="-1"></a>)</span></code></pre></div>
+<p>Reference a figure by its code chunk label with the <code>fig:</code> prefix, e.g., see Figure <a href="seuratqc.html#fig:nice-fig">3.3</a>. Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="seuratqc.html#tab:nice-tab">3.1</a>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="seuratqc.html#cb13-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb13-2"><a href="seuratqc.html#cb13-2" tabindex="-1"></a>  <span class="fu">head</span>(iris, <span class="dv">20</span>), <span class="at">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
+<span id="cb13-3"><a href="seuratqc.html#cb13-3" tabindex="-1"></a>  <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-4"><a href="seuratqc.html#cb13-4" tabindex="-1"></a>)</span></code></pre></div>
 <table>
 <caption><span id="tab:nice-tab">Table 3.1: </span>Here is a nice table!</caption>
 <thead>
@@ -483,6 +541,7 @@ Figure 3.1: Here is a nice figure!
 <p>You can write citations, too. For example, we are using the <strong>bookdown</strong> package <span class="citation">(<a href="#ref-R-bookdown">Xie 2024</a>)</span> in this sample book, which was built on top of R Markdown and <strong>knitr</strong> <span class="citation">(<a href="#ref-xie2015">Xie 2015</a>)</span>.</p>
 
 </div>
+</div>
 <h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-xie2015" class="csl-entry">
@@ -498,7 +557,7 @@ Xie, Yihui. 2015. <em>Dynamic Documents with <span>R</span> and Knitr</em>. 2nd 
         </div>
       </div>
 <a href="cellranger_arc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="normalization-and-cell-cycle-correction.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -552,20 +611,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Hands-on Analysis on Single Cell Multiome</title>
+  <title>Chapter 8 Data integration | Hands-on Analysis on Single Cell Multiome</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Hands-on Analysis on Single Cell Multiome" />
+  <meta property="og:title" content="Chapter 8 Data integration | Hands-on Analysis on Single Cell Multiome" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Hands-on Analysis on Single Cell Multiome" />
+  <meta name="twitter:title" content="Chapter 8 Data integration | Hands-on Analysis on Single Cell Multiome" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="cellranger_arc.html"/>
+<link rel="prev" href="applications-1.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,82 +202,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Hands-on Analysis on Single Cell Multiome</h1>
-<p class="author"><em>Danni Liu</em></p>
-<p class="date"><em>2024-06-04</em></p>
-</div>
-<div id="prerequisites" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Prerequisites<a href="index.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="about-data" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> About Data<a href="index.html#about-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The data used in this hands-on tutorial is a public single cell ‘multiome’ dataset of cryopreserved human peripheral blood mononuclear cells (PBMC) from 10x Genomics. This dataset is collected from a 25-year-old healthy female donor with around 10,000 cells, and scRNA-seq and scATAC-seq profiles were simultaneously sequenced from the same cells. You can find all information about this data and Cell Ranger ARC output reports from <a href="https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k?">10x Genomics website</a>.</p>
-<p>In this hands-on tutorial, we present a complete workflow for analyzing multiome data starting from sequencing data, with an additional section for data integration of multiomics datasets that are collected from different experiments. We will demonstrate how to preprocess raw sequencing data using Cell Ranger ARC, perform data quality control, cluster and annotate cell types, and identify marker genes using differential expression (DE) analysis. Then we will treat the two profiles of scRNA-seq and scATAC-seq as originating from two separate experiments, and perform data integration. Since they were originally measured in the same cells, this provides a ground truth that we can use to assess the accuracy of integration.</p>
-</div>
-<div id="server-environment-requirements" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> Server environment requirements<a href="index.html#server-environment-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We will use the UCI HPC3 environment for analysis. Please navigate to the <a href="https://hpc3.rcic.uci.edu/biojhub4/hub/login">JypyterHub portal</a>, and start a server under <strong>the second option</strong> with “R4.3.3” and “Spatial Transcriptomics” available in the environment. Please request <strong>4 CPU cores</strong>, with <strong>6Gb of memory</strong> for each core.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
-<img src="images/hpc3.png" alt="JupyterHub server setting" width="100%" />
-<p class="caption">
-Figure 1.1: JupyterHub server setting
-</p>
-</div>
-<p>Once the server started, click to open “Rstudio” app.</p>
-</div>
-<div id="r-libraries" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> R libraries<a href="index.html#r-libraries" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Please make sure to install the following packages before running the codes. <code>Seurat</code> and <code>SeuratData</code> should have installed in the environment if you are using HPC3 server.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="co"># Enter commands in R (or R studio, if installed)</span></span>
-<span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;Seurat&#39;</span>)</span>
-<span id="cb1-3"><a href="index.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
-<span id="cb1-4"><a href="index.html#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="index.html#cb1-5" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
-<span id="cb1-6"><a href="index.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb1-7"><a href="index.html#cb1-7" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&#39;satijalab/seurat-data&#39;</span>)</span>
-<span id="cb1-8"><a href="index.html#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="index.html#cb1-9" tabindex="-1"></a><span class="fu">setRepositories</span>(<span class="at">ind=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="co"># needed to automatically install Bioconductor dependencies</span></span>
-<span id="cb1-10"><a href="index.html#cb1-10" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;Signac&quot;</span>)</span>
-<span id="cb1-11"><a href="index.html#cb1-11" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="index.html#cb1-12" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;remotes&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
-<span id="cb1-13"><a href="index.html#cb1-13" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
-<span id="cb1-14"><a href="index.html#cb1-14" tabindex="-1"></a>}</span>
-<span id="cb1-15"><a href="index.html#cb1-15" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;mojaveazure/seurat-disk&quot;</span>)</span>
-<span id="cb1-16"><a href="index.html#cb1-16" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="index.html#cb1-17" tabindex="-1"></a><span class="co"># Installing genome assembly and gene annotation packages</span></span>
-<span id="cb1-18"><a href="index.html#cb1-18" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb1-19"><a href="index.html#cb1-19" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
-<span id="cb1-20"><a href="index.html#cb1-20" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&#39;BSgenome.Hsapiens.UCSC.hg38&#39;</span>, <span class="st">&#39;EnsDb.Hsapiens.v86&#39;</span>))</span>
-<span id="cb1-21"><a href="index.html#cb1-21" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="index.html#cb1-22" tabindex="-1"></a><span class="co"># install other packages needed.</span></span>
-<span id="cb1-23"><a href="index.html#cb1-23" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;hdf5r&quot;</span>)</span>
-<span id="cb1-24"><a href="index.html#cb1-24" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;biovizBase&quot;</span>)</span>
-<span id="cb1-25"><a href="index.html#cb1-25" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;glmGamPoi&quot;</span>)</span>
-<span id="cb1-26"><a href="index.html#cb1-26" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
-<span id="cb1-27"><a href="index.html#cb1-27" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;clustree&quot;</span>)</span>
-<span id="cb1-28"><a href="index.html#cb1-28" tabindex="-1"></a><span class="co"># install.packages(&quot;VariantAnnotation_1.50.0.tgz&quot;, repos = NULL, type=&quot;source&quot;)</span></span></code></pre></div>
-<p>If you want to run future analysis using your own laptop, please make sure you have the latest R and RStudio installed. You can refer to <a href="https://posit.co/download/rstudio-desktop/">RStudio website</a> for installation instructions.</p>
-<ul>
-<li>Seurat installation: <a href="https://satijalab.org/seurat/articles/install_v5" class="uri">https://satijalab.org/seurat/articles/install_v5</a></li>
-<li>Signac installation: <a href="https://stuartlab.org/signac/articles/install" class="uri">https://stuartlab.org/signac/articles/install</a></li>
-<li>SeuratData installation: <a href="https://github.com/satijalab/seurat-data" class="uri">https://github.com/satijalab/seurat-data</a></li>
-</ul>
-</div>
-<div id="construct-folder-structure" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Construct folder structure<a href="index.html#construct-folder-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" tabindex="-1"></a>pwd <span class="co"># check the current directory</span></span>
-<span id="cb2-2"><a href="index.html#cb2-2" tabindex="-1"></a>mkdir <span class="sc">-</span>p {<span class="sc">~</span><span class="er">/</span>cellranger_arc,<span class="sc">~</span><span class="er">/</span>pbmc_data} <span class="co"># create new folders</span></span>
-<span id="cb2-3"><a href="index.html#cb2-3" tabindex="-1"></a>ls <span class="co"># list all files</span></span></code></pre></div>
+<div id="data-integration" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Data integration<a href="data-integration.html#data-integration" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The PBMC multiome data was built in the <code>SeuratData</code> package and was stored in a SeuratObject already, so we can download the data and directly start analyzing. This data only needs to be loaded once, and R will skip this step the next time you load it.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-integration.html#cb1-1" tabindex="-1"></a><span class="co"># install the dataset and load requirements</span></span>
+<span id="cb1-2"><a href="data-integration.html#cb1-2" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout=</span><span class="dv">600</span>) <span class="co"># extend download time limit</span></span>
+<span id="cb1-3"><a href="data-integration.html#cb1-3" tabindex="-1"></a><span class="co">#InstallData(&quot;pbmcMultiome&quot;)</span></span>
+<span id="cb1-4"><a href="data-integration.html#cb1-4" tabindex="-1"></a><span class="co"># this will take ~5mins</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="data-integration.html#cb2-1" tabindex="-1"></a><span class="co"># load both modalities</span></span>
+<span id="cb2-2"><a href="data-integration.html#cb2-2" tabindex="-1"></a>pbmc<span class="ot">&lt;-</span><span class="fu">LoadData</span>(<span class="st">&quot;pbmcMultiome&quot;</span>)</span>
+<span id="cb2-3"><a href="data-integration.html#cb2-3" tabindex="-1"></a>pbmc.rna <span class="ot">&lt;-</span> <span class="fu">LoadData</span>(<span class="st">&quot;pbmcMultiome&quot;</span>, <span class="st">&quot;pbmc.rna&quot;</span>)</span>
+<span id="cb2-4"><a href="data-integration.html#cb2-4" tabindex="-1"></a>pbmc.atac <span class="ot">&lt;-</span> <span class="fu">LoadData</span>(<span class="st">&quot;pbmcMultiome&quot;</span>, <span class="st">&quot;pbmc.atac&quot;</span>)</span>
+<span id="cb2-5"><a href="data-integration.html#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="data-integration.html#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="data-integration.html#cb2-7" tabindex="-1"></a><span class="fu">VlnPlot</span>(pbmc, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">&quot;nCount_ATAC&quot;</span>, <span class="st">&quot;nCount_RNA&quot;</span>, <span class="st">&quot;percent.mt&quot;</span>), <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb2-8"><a href="data-integration.html#cb2-8" tabindex="-1"></a>  <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">pt.size =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">NoLegend</span>()</span>
+<span id="cb2-9"><a href="data-integration.html#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="data-integration.html#cb2-10" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="data-integration.html#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="data-integration.html#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="data-integration.html#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="data-integration.html#cb2-14" tabindex="-1"></a><span class="co">#pbmc.rna[[&quot;RNA&quot;]] &lt;- as(pbmc.rna[[&quot;RNA&quot;]], Class = &quot;Assay5&quot;)</span></span>
+<span id="cb2-15"><a href="data-integration.html#cb2-15" tabindex="-1"></a><span class="co"># repeat QC steps performed in the WNN vignette</span></span>
+<span id="cb2-16"><a href="data-integration.html#cb2-16" tabindex="-1"></a><span class="co">#pbmc.rna &lt;- subset(pbmc.rna, seurat_annotations != &quot;filtered&quot;)</span></span>
+<span id="cb2-17"><a href="data-integration.html#cb2-17" tabindex="-1"></a><span class="co">#pbmc.atac &lt;- subset(pbmc.atac, seurat_annotations != &quot;filtered&quot;)</span></span></code></pre></div>
 
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="cellranger_arc.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="applications-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -308,7 +265,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/07-integration.Rmd",
 "text": "Edit"
 },
 "history": {

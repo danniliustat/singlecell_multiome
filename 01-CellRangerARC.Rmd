@@ -15,25 +15,56 @@ knitr::include_graphics("images/gex-atac.png")
 
 ## BCL naming convention and CSV sample sheet
 
-The Cell Ranger ARC pipeline starts with Illumina sequencer's base call files (BCLs), and converts them into FASTQ files using `cellranger-arc mkfastq`. Before we can run `cellranger-arc`, it is important to prepare a folder and CSV sample sheet for each flow cell, and ensure the samples are named in concordance with the BCL naming convention. (Please refer to the [bcl2fastq User Guide](https://support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/bcl2fastq/bcl2fastq2-v2-20-software-guide-15051736-03.pdf) for complete instructions.)
+The Cell Ranger ARC pipeline starts with Illumina sequencer's base call files (BCLs), and converts them into FASTQ files using `cellranger-arc mkfastq`. Before we can run `cellranger-arc`, it is important to prepare a folder and CSV sample sheet for each flow cell, and ensure the samples in the sample sheet are named in concordance with the BCL naming convention. (Please refer to the [bcl2fastq User Guide](https://support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/bcl2fastq/bcl2fastq2-v2-20-software-guide-15051736-03.pdf) for complete instructions.)
 
-An example of  eg. Sample_S1_L001_R1_001.fastq.gz. Briefly, FASTQ files taken by cellranger count are named with the sample name and number, the flow cell lane, and read. The file extension is '*.fastq.gz'. An example of FASTQ file name looks like this: samplename_S1_L001_R1_001.fastq.gz.
+You can follow along by downloading the following example data from Cell Ranger website: 
 
-If the downloaded *.fastq.gz files are not in this naming convention, you will need to manually rename all files before you can call `cellranger count`.
-Here is the explaination for each element in the name:
+* [tiny-bcl-atac tar file](https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-atac-1.0.0.tar.gz)
+* [tiny-bcl-gex tar file](https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-gex-1.0.0.tar.gz)
 
-samplename: The name of the sample provided in the sample sheet. If a sample name is not available, the file name uses the sample ID instead.
-S1: The number of the sample based on the order that samples are listed in the sample sheet, starting with 1.
-L001: The lane number of the flow cell, starting with lane 1, to the number of lanes supported.
-R1: The read index. R1 indicates Read 1. R2 indicates Read 2 of a paired-end run.
-001: The last portion of the file name is always 001.
-Special Note: L001 and L002 are indices of different Illumina sequencing lanes or batches, and we can use these indices as well as sample indices as means by which to distinguish treatment groups. If we want to analyze all samples in one treatment group together, they will be assigned the same sample number (e.g. S1) and different lane number (e.g. L001 and L002). (NOTE: Reads cannot be assigned as sample number 0 or lane number 0. If it has number 0, it will be excluded from downstream analysis.) For example, if there are 2 treatment groups each has 3 replicates, we will index all three replicates in group 1 as S1_L001, S1_L002, S1_L003 and replicates in group 2 as S2_L001, S2_L002 and S3_L003.
+```{bash eval=F}
+cd ~/cellranger_arc
+wget https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-gex-1.0.0.tar.gz
+wget https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-atac-1.0.0.tar.gz
 
+#untar the files
+tar -xvzf cellranger-arc-tiny-bcl-atac-1.0.0.tar.gz
+tar -xvzf cellranger-arc-tiny-bcl-gex-1.0.0.tar.gz
+ls
+```
 
+We also need to prepare a sample sheet for running `cellranger-arc`. You can download the sample sheet from here: 
+
+* [cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv](https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv)
+* [cellranger-arc-tiny-bcl-gex-simple-1.0.0.csv](https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-gex-simple-1.0.0.csv)
+
+```{bash eval=F}
+wget https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv
+wget https://cf.10xgenomics.com/supp/cell-arc/cellranger-arc-tiny-bcl-gex-simple-1.0.0.csv
+```
+
+An example of the sample sheet is shown below.
+
+```{bash eval=F}
+$ cat cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv
+Lane,Sample,Index
+1,test_sample_atac,SI-NA-A1
+
+$ cat cellranger-arc-tiny-bcl-gex-simple-1.0.0.csv
+Lane,Sample,Index
+1,test_sample_gex,SI-TT-A1
+```
+
+The three columns are:
+
+* Lane: Which lane(s) of the flow cell to process. Can be either a single lane, a range (e.g., 2-4) or '*' for all lanes in the flow cell.
+* Sample: The name of the sample that you define.
+* Index: 10x Genomics sample index that was used in library construction
+
+***
 
 ## `cellranger-arc mkfastq`
 
-### Demultiplexing
 The `cellranger-arc mkfastq` is a pipeline that wraps Illumina's bcl2fastq, while also supports demultiplexing of ATAC or Gene Expression (GEX) flow cells. For the demultiplexing purpose, the `cellranger-arc mkfastq` should be run for each flow cell separately, independent of the number of sequencing runs of each library. Below are two examples. 
 
 In the first example, a library with sample index SI-NA-A1 was sequenced on two flow cells. The `cellranger-arc mkfastq` should be carried out for each flow cell. Next, the outputs will be processed though a single instance of `cellranger-arc count`.
@@ -48,12 +79,17 @@ knitr::include_graphics("images/GEX-multiplex.png")
 ```
 
 
-### Example codes
+Once all input files are prepared, we are ready to run `cellranger-arc`. `cellranger-arc` is already installed in HPC3 environment so we can call it directly using `module load`. You can check available software in HPC3 using `module avail`.
 
-```{r eval=FALSE}
-cellranger-arc mkfastq --id=tiny-bcl-atac \
-                     --run=/path/to/tiny-bcl-atac \
-                     --samplesheet=cellranger-arc-tiny-bcl-atac-samplesheet-1.0.0.csv
+Below is an example for running `cellranger-arc mkfastq` on one atac flow cell. You need to specify the path to the BCL file and the CSV sample sheet in `--run` and `--csv` respectively.
+
+```{bash eval=F}
+$ module load cellranger-arc
+$ cellranger-arc mkfastq --id=tiny-bcl-atac \
+                     --run=cellranger-arc-tiny-bcl-atac-1.0.0 \
+                     --csv=cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv
+
+
 
 
 cellranger-arc mkfastq (2.0.2)
@@ -62,16 +98,62 @@ Copyright (c) 2020 10x Genomics, Inc.  All rights reserved.
 
 
 Martian Runtime - v4.0.5
-
+Running preflight checks (please wait)...
+yyyy-mm-dd hh:mm:ss [runtime] (ready)           ID.bcl-atac.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET
+yyyy-mm-dd hh:mm:ss [runtime] (split_complete)  ID.bcl-atac.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET
+yyyy-mm-dd hh:mm:ss [runtime] (run:local)       ID.bcl-atac.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET.fork0.chnk0.main
+yyyy-mm-dd hh:mm:ss [runtime] (chunks_complete) ID.bcl-atac.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET
 ...
-
-Pipestance completed successfully!
-
-yyyy-mm-dd hh:mm:ss Shutting down.
-Saving pipestance info to "tiny-bcl-atac/tiny-bcl-atac.mri.tgz"
 
 ```
 
+Once the `mkfastq` run is completed, you can find the output files in `outs/fastq_path`. 
+
+```{bash eval=F}
+$ ls -l tiny-bcl-atac/outs/fastq_path/
+total 31744
+drwxrwxr-x 3 jdoe jdoe       24 Sep  7 22:49 p1
+drwxrwxr-x 3 jdoe jdoe       26 Sep  7 22:48 Reports
+drwxrwxr-x 2 jdoe jdoe      193 Sep  7 22:48 Stats
+-rw-rw-r-- 1 jdoe jdoe  3806257 Sep  7 22:48 Undetermined_S0_L001_I1_001.fastq.gz
+-rw-rw-r-- 1 jdoe jdoe   967448 Sep  7 22:48 Undetermined_S0_L001_R1_001.fastq.gz
+-rw-rw-r-- 1 jdoe jdoe  5773976 Sep  7 22:48 Undetermined_S0_L001_R2_001.fastq.gz
+-rw-rw-r-- 1 jdoe jdoe 12635207 Sep  7 22:48 Undetermined_S0_L001_R3_001.fastq.gz
+
+$ tree tiny-bcl-atac/outs/fastq_path/tiny-bcl-atac/
+tiny-bcl-atac/outs/fastq_path/p1
+└── s1
+    ├── test_sample_miseq_S1_L001_I1_001.fastq.gz
+    ├── test_sample_miseq_S1_L001_R1_001.fastq.gz
+    ├── test_sample_miseq_S1_L001_R2_001.fastq.gz
+    └── test_sample_miseq_S1_L001_R3_001.fastq.gz
+
+```
+
+eg. Sample_S1_L001_R1_001.fastq.gz. Briefly, FASTQ files taken by cellranger count are named with the sample name and number, the flow cell lane, and read. The file extension is '*.fastq.gz'. An example of FASTQ file name looks like this: samplename_S1_L001_R1_001.fastq.gz.
+
+If the downloaded *.fastq.gz files are not in this naming convention, you will need to manually rename all files before you can call `cellranger count`.
+Here is the explaination for each element in the name:
+
+samplename: The name of the sample provided in the sample sheet. If a sample name is not available, the file name uses the sample ID instead.
+S1: The number of the sample based on the order that samples are listed in the sample sheet, starting with 1.
+L001: The lane number of the flow cell, starting with lane 1, to the number of lanes supported.
+R1: The read index. R1 indicates Read 1. R2 indicates Read 2 of a paired-end run.
+001: The last portion of the file name is always 001.
+Special Note: L001 and L002 are indices of different Illumina sequencing lanes or batches, and we can use these indices as well as sample indices as means by which to distinguish treatment groups. If we want to analyze all samples in one treatment group together, they will be assigned the same sample number (e.g. S1) and different lane number (e.g. L001 and L002). (NOTE: Reads cannot be assigned as sample number 0 or lane number 0. If it has number 0, it will be excluded from downstream analysis.) For example, if there are 2 treatment groups each has 3 replicates, we will index all three replicates in group 1 as S1_L001, S1_L002, S1_L003 and replicates in group 2 as S2_L001, S2_L002 and S3_L003.
+
+## `cellranger-arc count`
+
+An example code
+```{bash eval=F}
+$ cd /home/jdoe/runs
+$ cellranger-arc count --id=sample345 \
+                       --reference=/opt/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 \
+                       --libraries=/home/jdoe/runs/libraries.csv \
+                       --localcores=16 \
+                       --localmem=64
+
+```
 
 
 

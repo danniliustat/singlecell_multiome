@@ -1,0 +1,29 @@
+# Data integration
+The PBMC multiome data was built in the `SeuratData` package and was stored in a SeuratObject already, so we can download the data and directly start analyzing. This data only needs to be loaded once, and R will skip this step the next time you load it.
+```{r eval=TRUE,results='markup',warning=FALSE,message=FALSE}
+# install the dataset and load requirements
+options(timeout=600) # extend download time limit
+#InstallData("pbmcMultiome")
+# this will take ~5mins
+```
+
+```{r eval=FALSE}
+# load both modalities
+pbmc<-LoadData("pbmcMultiome")
+pbmc.rna <- LoadData("pbmcMultiome", "pbmc.rna")
+pbmc.atac <- LoadData("pbmcMultiome", "pbmc.atac")
+
+
+VlnPlot(pbmc, features = c("nCount_ATAC", "nCount_RNA", "percent.mt"), ncol = 3,
+  log = TRUE, pt.size = 0) + NoLegend()
+
+
+
+
+
+#pbmc.rna[["RNA"]] <- as(pbmc.rna[["RNA"]], Class = "Assay5")
+# repeat QC steps performed in the WNN vignette
+#pbmc.rna <- subset(pbmc.rna, seurat_annotations != "filtered")
+#pbmc.atac <- subset(pbmc.atac, seurat_annotations != "filtered")
+
+```
