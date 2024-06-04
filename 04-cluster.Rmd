@@ -46,7 +46,7 @@ plot1 + plot2 + plot_layout(ncol=1)
 ## Dimension reduction
 Run separately for RNA and ATAC. `min.dist` and `spread` controls how tightly the points are clustered.
 
-```{r eval=F,warning=FALSE,message=FALSE}
+```{r eval=T,warning=FALSE,message=FALSE}
 # RNA analysis
 DefaultAssay(pbmc) <- "RNA"
 pbmc <- RunPCA(pbmc) 
@@ -98,7 +98,7 @@ DimPlot(pbmc, label = TRUE, repel = TRUE, reduction = "umap.rna")
 ```
 
 Generate a resolution tree for res=0.1 to 1.5 to select a suitable resolution.
-```{r eval=T, warning=FALSE,message=FALSE}
+```{r eval=T, result=FALSE, warning=FALSE,message=FALSE}
 DefaultAssay(pbmc) <- "RNA"
 resolutions <- seq(0.1, 1.5, by = 0.1)
 # Initialize a list to store the clustering results
