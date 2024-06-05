@@ -1,5 +1,20 @@
 # Peak calling and Motif analysis
 
+```{r eval=TRUE,echo =F,results=FALSE,warning=FALSE,message=FALSE}
+library(Seurat)
+library(SeuratData)
+library(Signac)
+library(SeuratDisk)
+library(BSgenome.Hsapiens.UCSC.hg38) 
+library(EnsDb.Hsapiens.v86)
+library(ggplot2)
+library(cowplot)
+library(hdf5r)
+library(dplyr)
+library(patchwork)
+library(clustree)
+```
+
 ```{r eval=T, echo=F}
 pbmc<-readRDS("../pbmc_data/pbmc_motif.rds")
 ```
@@ -116,7 +131,7 @@ Here, we find differentially accessible peaks between Pvalb and Sst inhibitory i
 We then perform a hypergeometric test to test the probability of observing the motif at the given frequency by chance, comparing with a background set of peaks matched for GC content.
 
 
-```{r eval=F}
+```{r eval=T,warning=FALSE,message=FALSE}
 da_peaks <- FindMarkers(
   object = pbmc,
   ident.1 = 'CD8 TEM',
@@ -148,6 +163,7 @@ MotifPlot(
 saveRDS(pbmc,file="pbmc_motif.rds")
 ```
 
+***
 
 ```{r eval=F, echo=F}
 ## codes for reconstruct pbmc if needed
