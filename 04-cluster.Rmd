@@ -30,7 +30,7 @@ length(VariableFeatures(pbmc))
 # [1] 2000 # return top 2000 variable features by default
 ```
 
-```{r eval=T,echo=F, fig.cap='Label the top 10 variable features', out.width='100%', fig.asp=.75, fig.align='center'}
+```{r eval=T,echo=T, warning=FALSE,message=FALSE, fig.cap='Label the top 10 variable features', out.width='100%', fig.asp=.75, fig.align='center'}
 library(patchwork)
 # Identify the 10 most highly variable genes
 top10 <- head(VariableFeatures(pbmc), 10)
@@ -46,7 +46,7 @@ plot1 + plot2 + plot_layout(ncol=1)
 ## Dimension reduction
 Run separately for RNA and ATAC. `min.dist` and `spread` controls how tightly the points are clustered.
 
-```{r eval=T,warning=FALSE,message=FALSE}
+```{r eval=T,warning=FALSE,message=FALSE,fig.cap='PC plot by cell cycle', out.width='100%', fig.asp=.75, fig.align='center'}
 # RNA analysis
 DefaultAssay(pbmc) <- "RNA"
 pbmc <- RunPCA(pbmc) 
@@ -129,7 +129,7 @@ clustree(df, prefix = "res_")
 ```
 
 Compare: resolution=0.1, resolution=0.6 and resolution=1.1.
-s
+
 ```{r eval=T,fig.cap='Clusters based on RNA assay vs joint assays', out.width='250%', fig.asp=.4, fig.align='center'}
 p1 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.0.1", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=0.1")
 p2 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.0.7", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=0.7")
@@ -153,7 +153,7 @@ You can further generate sub-clusters within large cluster to explore underlying
 ```
 
 Compare: resolution=0.7 for RNA and resolution=0.6 for joint assays have similar number of clusters.
-s
+
 ```{r eval=T,fig.cap='Clusters based on RNA assay vs joint assays', out.width='150%', fig.asp=.5, fig.align='center'}
 p1 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.0.7", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters")
 p2 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "wsnn_res.0.6", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("WNN clusters")

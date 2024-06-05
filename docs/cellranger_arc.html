@@ -23,7 +23,7 @@
 <meta name="author" content="Danni Liu" />
 
 
-<meta name="date" content="2024-06-04" />
+<meta name="date" content="2024-06-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -146,6 +146,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#server-environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Server environment requirements</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#r-libraries"><i class="fa fa-check"></i><b>1.3</b> R libraries</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#construct-folder-structure"><i class="fa fa-check"></i><b>1.4</b> Construct folder structure</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#downloading-fastq-files"><i class="fa fa-check"></i><b>1.5</b> Downloading FASTQ files</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="cellranger_arc.html"><a href="cellranger_arc.html"><i class="fa fa-check"></i><b>2</b> Cell Ranger ARC for preprocessing sequencing data</a>
 <ul>
@@ -170,11 +171,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#dimension-reduction"><i class="fa fa-check"></i><b>5.2</b> Dimension reduction</a></li>
 <li class="chapter" data-level="5.3" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#clustering-and-joint-clustering"><i class="fa fa-check"></i><b>5.3</b> Clustering and joint clustering</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>6</b> Differential Expression (DE) analysis</a></li>
-<li class="chapter" data-level="7" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>7</b> Applications</a>
+<li class="chapter" data-level="6" data-path="differential-expression-de-analysis-and-cell-type-annotation.html"><a href="differential-expression-de-analysis-and-cell-type-annotation.html"><i class="fa fa-check"></i><b>6</b> Differential Expression (DE) analysis and cell type annotation</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>7.1</b> Example one</a></li>
-<li class="chapter" data-level="7.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>7.2</b> Example two</a></li>
+<li class="chapter" data-level="6.1" data-path="differential-expression-de-analysis-and-cell-type-annotation.html"><a href="differential-expression-de-analysis-and-cell-type-annotation.html#de-analysis"><i class="fa fa-check"></i><b>6.1</b> DE analysis</a></li>
+<li class="chapter" data-level="6.2" data-path="differential-expression-de-analysis-and-cell-type-annotation.html"><a href="differential-expression-de-analysis-and-cell-type-annotation.html#cell-type-annotation"><i class="fa fa-check"></i><b>6.2</b> Cell type annotation</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="peak-calling-and-motif-analysis.html"><a href="peak-calling-and-motif-analysis.html"><i class="fa fa-check"></i><b>7</b> Peak calling and Motif analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="peak-calling-and-motif-analysis.html"><a href="peak-calling-and-motif-analysis.html#linkage-plot"><i class="fa fa-check"></i><b>7.1</b> Linkage plot</a></li>
+<li class="chapter" data-level="7.2" data-path="peak-calling-and-motif-analysis.html"><a href="peak-calling-and-motif-analysis.html#call-peaks-using-macs2"><i class="fa fa-check"></i><b>7.2</b> Call peaks using MACS2</a></li>
+<li class="chapter" data-level="7.3" data-path="peak-calling-and-motif-analysis.html"><a href="peak-calling-and-motif-analysis.html#motif-analysis"><i class="fa fa-check"></i><b>7.3</b> Motif analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="data-integration.html"><a href="data-integration.html"><i class="fa fa-check"></i><b>8</b> Data integration</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -217,12 +223,15 @@ Figure 2.1: The new SSA logo, which is actually a scatterplot, which is super ne
 </p>
 </div>
 <p>The FASTQ files are usually prepared by our sequencing core, so we can take the FASTQ files as input and call <code>callranger-arc count</code> to generate count matrices directly.</p>
+<div id="note" style="color: red;">
+<p><code>cellranger-arc</code> is already installed in HPC3 environment so we can call it directly using <code>module load</code>. You can check available software in HPC3 using <code>module avail</code>.</p>
+</div>
 <div id="cellranger-arc-mkfastq" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> <code>cellranger-arc mkfastq</code><a href="cellranger_arc.html#cellranger-arc-mkfastq" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="note" style="color: red;">
 <p>Note: We won’t run <code>cellranger-arc mkfastq</code> in this hands-on session, so this section below just shows an example for running the <code>mkfastq</code> pipeline. You can check the Cell Ranger website for detailed instructions for preparing input files for <code>mkfastq</code> run.</p>
 </div>
-<p>The Cell Ranger ARC pipeline starts with Illumina sequencer’s base call files (BCLs), and converts them into FASTQ files using <code>cellranger-arc mkfastq</code>. The <code>cellranger-arc mkfastq</code> is a pipeline that wraps Illumina’s bcl2fastq, while also supports demultiplexing of ATAC or Gene Expression (GEX) flow cells. For the demultiplexing purpose, the <code>cellranger-arc mkfastq</code> should be run for each flow cell separately, independent of the number of sequencing runs of each library. Below are two examples.</p>
+<p>The Cell Ranger ARC pipeline starts with Illumina sequencer’s base call files (BCLs), and converts them into FASTQ files using <code>cellranger-arc mkfastq</code>. The <code>cellranger-arc mkfastq</code> is a pipeline that wraps Illumina’s <em>bcl2fastq</em>, while also supports demultiplexing of ATAC or Gene Expression (GEX) flow cells. For the demultiplexing purpose, the <code>cellranger-arc mkfastq</code> should be run for each flow cell separately, independent of the number of sequencing runs of each library. Below are two examples.</p>
 <p>In the first example, a library with sample index SI-NA-A1 was sequenced on two flow cells. The <code>cellranger-arc mkfastq</code> should be carried out for each flow cell. Next, the outputs will be processed though a single instance of <code>cellranger-arc count</code>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
 <img src="images/ATAC-1.png" alt="The new SSA logo, which is actually a scatterplot, which is super neat!" width="100%" />
@@ -239,11 +248,11 @@ Figure 2.3: The new SSA logo, which is actually a scatterplot, which is super ne
 </div>
 <p>For running <code>cellranger-arc mkfastq</code>, you will input a folder with BCL outputs from 10X machine, and a CSV sample sheet.</p>
 <p>An example of the sample sheet is shown below.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="cellranger_arc.html#cb1-1" tabindex="-1"></a><span class="ex">$</span> cat cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="cellranger_arc.html#cb1-1" tabindex="-1"></a><span class="ex">$</span> cat cellranger-arc-test-bcl-atac-simple-1.0.0.csv</span>
 <span id="cb1-2"><a href="cellranger_arc.html#cb1-2" tabindex="-1"></a><span class="ex">Lane,Sample,Index</span></span>
 <span id="cb1-3"><a href="cellranger_arc.html#cb1-3" tabindex="-1"></a><span class="ex">1,test_sample_atac,SI-NA-A1</span></span>
 <span id="cb1-4"><a href="cellranger_arc.html#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="cellranger_arc.html#cb1-5" tabindex="-1"></a><span class="ex">$</span> cat cellranger-arc-tiny-bcl-gex-simple-1.0.0.csv</span>
+<span id="cb1-5"><a href="cellranger_arc.html#cb1-5" tabindex="-1"></a><span class="ex">$</span> cat cellranger-arc-test-bcl-gex-simple-1.0.0.csv</span>
 <span id="cb1-6"><a href="cellranger_arc.html#cb1-6" tabindex="-1"></a><span class="ex">Lane,Sample,Index</span></span>
 <span id="cb1-7"><a href="cellranger_arc.html#cb1-7" tabindex="-1"></a><span class="ex">1,test_sample_gex,SI-TT-A1</span></span></code></pre></div>
 <p>The three columns are:</p>
@@ -255,9 +264,9 @@ Figure 2.3: The new SSA logo, which is actually a scatterplot, which is super ne
 <hr />
 <p>Below is an example for running <code>cellranger-arc mkfastq</code> on one atac flow cell. You can specify the path to the BCL file and the CSV sample sheet in <code>--run</code> and <code>--csv</code> respectively.</p>
 <pre class="text"><code>$ module load cellranger-arc
-$ cellranger-arc mkfastq --id=tiny-bcl-atac \
-                     --run=cellranger-arc-tiny-bcl-atac-1.0.0 \
-                     --csv=cellranger-arc-tiny-bcl-atac-simple-1.0.0.csv
+$ cellranger-arc mkfastq --id=test_bcl-atac \
+                     --run=cellranger-arc-test-bcl-atac-1.0.0 \
+                     --csv=cellranger-arc-test-bcl-atac-simple-1.0.0.csv
 
 cellranger-arc mkfastq (2.0.2)
 Copyright (c) 2020 10x Genomics, Inc.  All rights reserved.
@@ -273,7 +282,7 @@ yyyy-mm-dd hh:mm:ss [runtime] (chunks_complete) ID.bcl-atac.MAKE_FASTQS_CS.MAKE_
 ...
 </code></pre>
 <p>Once the <code>mkfastq</code> run is completed, you can find the output files in <code>outs/fastq_path</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="cellranger_arc.html#cb3-1" tabindex="-1"></a><span class="ex">$</span> ls <span class="at">-l</span> tiny-bcl-atac/outs/fastq_path/</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="cellranger_arc.html#cb3-1" tabindex="-1"></a><span class="ex">$</span> ls <span class="at">-l</span> test-bcl-atac/outs/fastq_path/</span>
 <span id="cb3-2"><a href="cellranger_arc.html#cb3-2" tabindex="-1"></a><span class="ex">total</span> 31744</span>
 <span id="cb3-3"><a href="cellranger_arc.html#cb3-3" tabindex="-1"></a><span class="ex">drwxrwxr-x</span> 3 jdoe jdoe       24 Sep  7 22:49 p1</span>
 <span id="cb3-4"><a href="cellranger_arc.html#cb3-4" tabindex="-1"></a><span class="ex">drwxrwxr-x</span> 3 jdoe jdoe       26 Sep  7 22:48 Reports</span>
@@ -283,20 +292,21 @@ yyyy-mm-dd hh:mm:ss [runtime] (chunks_complete) ID.bcl-atac.MAKE_FASTQS_CS.MAKE_
 <span id="cb3-8"><a href="cellranger_arc.html#cb3-8" tabindex="-1"></a><span class="ex">-rw-rw-r--</span> 1 jdoe jdoe  5773976 Sep  7 22:48 Undetermined_S0_L001_R2_001.fastq.gz</span>
 <span id="cb3-9"><a href="cellranger_arc.html#cb3-9" tabindex="-1"></a><span class="ex">-rw-rw-r--</span> 1 jdoe jdoe 12635207 Sep  7 22:48 Undetermined_S0_L001_R3_001.fastq.gz</span>
 <span id="cb3-10"><a href="cellranger_arc.html#cb3-10" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="cellranger_arc.html#cb3-11" tabindex="-1"></a><span class="ex">$</span> tree tiny-bcl-atac/outs/fastq_path/tiny-bcl-atac/</span>
+<span id="cb3-11"><a href="cellranger_arc.html#cb3-11" tabindex="-1"></a><span class="ex">$</span> tree test-bcl-atac/outs/fastq_path/test-bcl-atac/</span>
 <span id="cb3-12"><a href="cellranger_arc.html#cb3-12" tabindex="-1"></a><span class="ex">tiny-bcl-atac/outs/fastq_path/p1</span></span>
 <span id="cb3-13"><a href="cellranger_arc.html#cb3-13" tabindex="-1"></a><span class="ex">└──</span> s1</span>
 <span id="cb3-14"><a href="cellranger_arc.html#cb3-14" tabindex="-1"></a>    <span class="ex">├──</span> test_sample_miseq_S1_L001_I1_001.fastq.gz</span>
 <span id="cb3-15"><a href="cellranger_arc.html#cb3-15" tabindex="-1"></a>    <span class="ex">├──</span> test_sample_miseq_S1_L001_R1_001.fastq.gz</span>
 <span id="cb3-16"><a href="cellranger_arc.html#cb3-16" tabindex="-1"></a>    <span class="ex">├──</span> test_sample_miseq_S1_L001_R2_001.fastq.gz</span>
 <span id="cb3-17"><a href="cellranger_arc.html#cb3-17" tabindex="-1"></a>    <span class="ex">└──</span> test_sample_miseq_S1_L001_R3_001.fastq.gz</span></code></pre></div>
+<hr />
 </div>
 <div id="bcl-naming-convention" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> BCL naming convention<a href="cellranger_arc.html#bcl-naming-convention" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>If you obtain the FASTQ files from other sources, it is important to ensure the FASTQ files are named in concordance with the BCL naming convention before running <code>cellranger-arc</code>. (Please refer to the [cellranger-arc input FASTQ files] (<a href="https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/specifying-input-fastq-count" class="uri">https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/specifying-input-fastq-count</a>) and <a href="https://support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/bcl2fastq/bcl2fastq2-v2-20-software-guide-15051736-03.pdf">bcl2fastq User Guide</a> for complete instructions.)</p>
-<p>An example of the FASTQ file looks like this: Sample_S1_L001_R1_001.fastq.gz. Briefly, FASTQ files taken by cellranger count are named with the sample name and number, the flow cell lane, and read. The file extension is ’*.fastq.gz’.</p>
+<p>An example of the FASTQ file looks like this: <code>Sample_S1_L001_R1_001.fastq.gz</code>. Briefly, FASTQ files taken by are named with the sample name and number, the flow cell lane, and read. The file extension is ’*.fastq.gz’.</p>
 <p>If the downloaded *.fastq.gz files are not in this naming convention, you will need to manually rename all files before you can call <code>cellranger-arc count</code>.</p>
-<p>Here is the explaination for each element in the name:</p>
+<p>Here is the explanation for each element in the name:</p>
 <ul>
 <li>samplename: The name of the sample provided in the sample sheet. If a sample name is not available, the file name uses the sample ID instead.</li>
 <li>S1: The number of the sample based on the order that samples are listed in the sample sheet, starting with 1.</li>
@@ -309,7 +319,6 @@ yyyy-mm-dd hh:mm:ss [runtime] (chunks_complete) ID.bcl-atac.MAKE_FASTQS_CS.MAKE_
 </div>
 <div id="cellranger-arc-count" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> <code>cellranger-arc count</code><a href="cellranger_arc.html#cellranger-arc-count" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Once all input files are prepared, we are ready to run <code>cellranger-arc</code>. <code>cellranger-arc</code> is already installed in HPC3 environment so we can call it directly using <code>module load</code>. You can check available software in HPC3 using <code>module avail</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="cellranger_arc.html#cb4-1" tabindex="-1"></a><span class="ex">fastqs,sample,library_type</span></span>
 <span id="cb4-2"><a href="cellranger_arc.html#cb4-2" tabindex="-1"></a><span class="ex">/home/jdoe/fastq_path,example,Gene</span> Expression</span>
 <span id="cb4-3"><a href="cellranger_arc.html#cb4-3" tabindex="-1"></a><span class="ex">/home/jdoe/fastq_path,example,Chromatin</span> Accessibility</span></code></pre></div>
@@ -320,12 +329,48 @@ yyyy-mm-dd hh:mm:ss [runtime] (chunks_complete) ID.bcl-atac.MAKE_FASTQS_CS.MAKE_
 <li>library_type: This field is case-sensitive and must exactly match “Chromatin Accessibility” for a Multiome ATAC library and “Gene Expression” for a Multiome GEX library.</li>
 </ul>
 <p>An example code</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="cellranger_arc.html#cb5-1" tabindex="-1"></a><span class="ex">$</span> cd /home/jdoe/runs</span>
-<span id="cb5-2"><a href="cellranger_arc.html#cb5-2" tabindex="-1"></a><span class="ex">$</span> cellranger-arc count <span class="at">--id</span><span class="op">=</span>sample345 <span class="dt">\</span></span>
-<span id="cb5-3"><a href="cellranger_arc.html#cb5-3" tabindex="-1"></a>                       <span class="at">--reference</span><span class="op">=</span>~/commondata/cellranger-arc/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 <span class="dt">\</span></span>
-<span id="cb5-4"><a href="cellranger_arc.html#cb5-4" tabindex="-1"></a>                       <span class="at">--libraries</span><span class="op">=</span>/home/jdoe/runs/libraries.csv <span class="dt">\</span></span>
-<span id="cb5-5"><a href="cellranger_arc.html#cb5-5" tabindex="-1"></a>                       <span class="at">--localcores</span><span class="op">=</span>16 <span class="dt">\</span></span>
-<span id="cb5-6"><a href="cellranger_arc.html#cb5-6" tabindex="-1"></a>                       <span class="at">--localmem</span><span class="op">=</span>64</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="cellranger_arc.html#cb5-1" tabindex="-1"></a><span class="ex">$</span> cd /dfs6/pub/your_username</span>
+<span id="cb5-2"><a href="cellranger_arc.html#cb5-2" tabindex="-1"></a><span class="ex">$</span> cellranger-arc count <span class="at">--id</span><span class="op">=</span>Pancreas1 <span class="dt">\</span></span>
+<span id="cb5-3"><a href="cellranger_arc.html#cb5-3" tabindex="-1"></a>                       <span class="at">--reference</span><span class="op">=</span>/home/jovyan/commondata/cellranger-arc/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 <span class="dt">\</span></span>
+<span id="cb5-4"><a href="cellranger_arc.html#cb5-4" tabindex="-1"></a>                       <span class="at">--libraries</span><span class="op">=</span>/dfs6/pub/dannil15/cellranger-arc/library.csv <span class="dt">\</span></span>
+<span id="cb5-5"><a href="cellranger_arc.html#cb5-5" tabindex="-1"></a>                       <span class="at">--localcores</span><span class="op">=</span>8 <span class="dt">\</span></span>
+<span id="cb5-6"><a href="cellranger_arc.html#cb5-6" tabindex="-1"></a>                       <span class="at">--localmem</span><span class="op">=</span>48</span></code></pre></div>
+<p>The output folder structure looks like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="cellranger_arc.html#cb6-1" tabindex="-1"></a><span class="ex">Outputs:</span></span>
+<span id="cb6-2"><a href="cellranger_arc.html#cb6-2" tabindex="-1"></a>      <span class="ex">...</span></span>
+<span id="cb6-3"><a href="cellranger_arc.html#cb6-3" tabindex="-1"></a><span class="ex">-</span> Run summary HTML:                              /home/jdoe/runs/sample345/outs/web_summary.html</span>
+<span id="cb6-4"><a href="cellranger_arc.html#cb6-4" tabindex="-1"></a><span class="ex">-</span> Run summary metrics CSV:                       /home/jdoe/runs/sample345/outs/summary.csv</span>
+<span id="cb6-5"><a href="cellranger_arc.html#cb6-5" tabindex="-1"></a><span class="ex">-</span> Per barcode summary metrics:                   /home/jdoe/runs/sample345/outs/per_barcode_metrics.csv</span>
+<span id="cb6-6"><a href="cellranger_arc.html#cb6-6" tabindex="-1"></a><span class="ex">-</span> Filtered feature barcode matrix MEX:           /home/jdoe/runs/sample345/outs/filtered_feature_bc_matrix</span>
+<span id="cb6-7"><a href="cellranger_arc.html#cb6-7" tabindex="-1"></a><span class="ex">-</span> Filtered feature barcode matrix HDF5:          /home/jdoe/runs/sample345/outs/filtered_feature_bc_matrix.h5</span>
+<span id="cb6-8"><a href="cellranger_arc.html#cb6-8" tabindex="-1"></a><span class="ex">-</span> Raw feature barcode matrix MEX:                /home/jdoe/runs/sample345/outs/raw_feature_bc_matrix</span>
+<span id="cb6-9"><a href="cellranger_arc.html#cb6-9" tabindex="-1"></a><span class="ex">-</span> Raw feature barcode matrix HDF5:               /home/jdoe/runs/sample345/outs/raw_feature_bc_matrix.h5</span>
+<span id="cb6-10"><a href="cellranger_arc.html#cb6-10" tabindex="-1"></a><span class="ex">-</span> Loupe browser visualization file:              /home/jdoe/runs/sample345/outs/cloupe.cloupe</span>
+<span id="cb6-11"><a href="cellranger_arc.html#cb6-11" tabindex="-1"></a><span class="ex">-</span> GEX Position-sorted alignments BAM:            /home/jdoe/runs/sample345/outs/gex_possorted_bam.bam</span>
+<span id="cb6-12"><a href="cellranger_arc.html#cb6-12" tabindex="-1"></a><span class="ex">-</span> GEX Position-sorted alignments BAM index:      /home/jdoe/runs/sample345/outs/gex_possorted_bam.bam.bai</span>
+<span id="cb6-13"><a href="cellranger_arc.html#cb6-13" tabindex="-1"></a><span class="ex">-</span> GEX Per molecule information file:             /home/jdoe/runs/sample345/outs/gex_molecule_info.h5</span>
+<span id="cb6-14"><a href="cellranger_arc.html#cb6-14" tabindex="-1"></a><span class="ex">-</span> ATAC Position-sorted alignments BAM:           /home/jdoe/runs/sample345/outs/atac_possorted_bam.bam</span>
+<span id="cb6-15"><a href="cellranger_arc.html#cb6-15" tabindex="-1"></a><span class="ex">-</span> ATAC Position-sorted alignments BAM index:     /home/jdoe/runs/sample345/outs/atac_possorted_bam.bam.bai</span>
+<span id="cb6-16"><a href="cellranger_arc.html#cb6-16" tabindex="-1"></a><span class="ex">-</span> ATAC Per fragment information file:            /home/jdoe/runs/sample345/outs/atac_fragments.tsv.gz</span>
+<span id="cb6-17"><a href="cellranger_arc.html#cb6-17" tabindex="-1"></a><span class="ex">-</span> ATAC Per fragment information index:           /home/jdoe/runs/sample345/outs/atac_fragments.tsv.gz.tbi</span>
+<span id="cb6-18"><a href="cellranger_arc.html#cb6-18" tabindex="-1"></a><span class="ex">-</span> ATAC peak locations:                           /home/jdoe/runs/sample345/outs/atac_peaks.bed</span>
+<span id="cb6-19"><a href="cellranger_arc.html#cb6-19" tabindex="-1"></a><span class="ex">-</span> ATAC smoothed transposition site track:        /home/jdoe/runs/sample345/outs/atac_cut_sites.bigwig</span>
+<span id="cb6-20"><a href="cellranger_arc.html#cb6-20" tabindex="-1"></a><span class="ex">-</span> ATAC peak annotations based on proximal genes: /home/jdoe/runs/sample345/outs/atac_peak_annotation.tsv</span>
+<span id="cb6-21"><a href="cellranger_arc.html#cb6-21" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="cellranger_arc.html#cb6-22" tabindex="-1"></a><span class="ex">Waiting</span> 6 seconds for UI to do final refresh.</span>
+<span id="cb6-23"><a href="cellranger_arc.html#cb6-23" tabindex="-1"></a><span class="ex">Pipestance</span> completed successfully!</span>
+<span id="cb6-24"><a href="cellranger_arc.html#cb6-24" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="cellranger_arc.html#cb6-25" tabindex="-1"></a><span class="ex">yyyy-mm-dd</span> hh:mm:ss Shutting down.</span>
+<span id="cb6-26"><a href="cellranger_arc.html#cb6-26" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="cellranger_arc.html#cb6-27" tabindex="-1"></a><span class="ex">Saving</span> pipestance info to <span class="st">&quot;sample345/sample345.mri.tgz&quot;</span></span></code></pre></div>
+<p>The outputs that are useful for next step include:</p>
+<ul>
+<li>web_summary.html: Run summary metrics and charts in HTML format.</li>
+<li>filtered_feature_bc_matrix.h5: Filtered feature barcode matrix stored in hdf5 format. The rows consist of all the gene and peak features concatenated together (identical to raw feature barcode matrix) and the columns are restricted to those barcodes that are identified as cells.</li>
+<li>filtered_feature_bc_matrix: Filtered feature barcode matrix stored in MEX format. The rows consist of all the gene and peak features concatenated together (identical to raw feature barcode matrix) and the columns are restricted to those barcodes that are identified as cells.</li>
+<li>atac_fragments.tsv.gz: Count and barcode information for every ATAC fragment observed in the experiment in TSV format.</li>
+<li>atac_fragments.tsv.gz.tbi: Index for atac_fragments.tsv.gz.</li>
+</ul>
 
 </div>
 </div>

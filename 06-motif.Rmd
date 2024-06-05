@@ -63,7 +63,7 @@ peaks <- CallPeaks(
 
 ```
 
-```{r eval=F,echo=T,warning=FALSE,message=FALSE,out.width='100%', fig.asp=0.9, fig.align='center'}
+```{r eval=F,echo=F,warning=FALSE,message=FALSE,out.width='100%', fig.asp=0.9, fig.align='center'}
 CoveragePlot(
   object = pbmc,
   region = "CD8A",
@@ -76,10 +76,15 @@ CoveragePlot(
 
 
 ## Motif analysis
+
+```{r eval=T, echo=F}
+pbmc<-readRDS("../pbmc_data/pbmc_motif.rds")
+```
+
 Adding motif information to the Seurat object
 To add the DNA sequence motif information required for motif analyses, we can run the AddMotifs() function:
 
-```{r}
+```{r eval=F, echo=T}
 # add motif information
 library(TFBSTools)
 library(JASPAR2020)
@@ -111,7 +116,7 @@ Here, we find differentially accessible peaks between Pvalb and Sst inhibitory i
 We then perform a hypergeometric test to test the probability of observing the motif at the given frequency by chance, comparing with a background set of peaks matched for GC content.
 
 
-```{r}
+```{r eval=F}
 da_peaks <- FindMarkers(
   object = pbmc,
   ident.1 = 'CD8 TEM',
@@ -121,10 +126,8 @@ da_peaks <- FindMarkers(
   min.pct = 0.05,
   latent.vars = 'nCount_ATAC'
 )
-
 # get top differentially accessible peaks
 top.da.peak <- rownames(da_peaks[da_peaks$p_val < 0.005 & da_peaks$pct.1 > 0.2, ])
-
 
 # test enrichment
 enriched.motifs <- FindMotifs(
@@ -139,10 +142,11 @@ MotifPlot(
   object = pbmc,
   motifs = head(rownames(enriched.motifs))
 )
-
-
 ```
 
+```{r eval=F}
+saveRDS(pbmc,file="pbmc_motif.rds")
+```
 
 
 ```{r eval=F, echo=F}

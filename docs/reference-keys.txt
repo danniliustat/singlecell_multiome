@@ -75,3 +75,9 @@ fig:unnamed-chunk-18
 downloading-fastq-files
 fig:unnamed-chunk-15
 fig:unnamed-chunk-19
+differential-expression-de-analysis-and-cell-type-annotation
+de-analysis
+peak-calling-and-motif-analysis
+linkage-plot
+call-peaks-using-macs2
+motif-analysis
