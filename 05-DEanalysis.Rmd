@@ -61,7 +61,7 @@ VlnPlot(pbmc, features = c("TSHZ2","LEF1"),slot = "counts", log = TRUE, pt.size=
 FeaturePlot(pbmc, features = c("LEF1", "FHIT", "LTB", "NELL2", "AFF3", "BANK1", "VCAN", "FCGR3A", "TCF4"))
 ```
 
-```{r eval=T, fig.cap='Heatmap of top 3 DE markers for each cluster', out.width='300%', fig.asp=.75, fig.align='center'}
+```{r eval=T, fig.cap='Heatmap of top 3 DE markers for each cluster', out.width='400%', fig.asp=.75, fig.align='center'}
 DoHeatmap(object = pbmc, features = top3_log2FC$gene)+ NoLegend()
 ```
 

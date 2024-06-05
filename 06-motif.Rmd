@@ -1,7 +1,7 @@
 # Peak calling and Motif analysis
 
 ```{r eval=T, echo=F}
-pbmc<-readRDS("../pbmc_data/pbmc_anno_new.rds")
+pbmc<-readRDS("../pbmc_data/pbmc_motif.rds")
 ```
 
 ## Linkage plot
