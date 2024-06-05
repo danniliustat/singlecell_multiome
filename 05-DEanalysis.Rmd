@@ -1,7 +1,65 @@
-# Differential Expression (DE) analysis
+# Differential Expression (DE) analysis and cell type annotation
 
+```{r eval=TRUE,echo =F,results=FALSE,warning=FALSE,message=FALSE}
+library(Seurat)
+library(SeuratData)
+library(Signac)
+library(SeuratDisk)
+library(BSgenome.Hsapiens.UCSC.hg38) 
+library(EnsDb.Hsapiens.v86)
+library(ggplot2)
+library(cowplot)
+library(hdf5r)
+library(dplyr)
+library(patchwork)
+library(clustree)
+```
 
-# Cell type annotation
+Continue from checkpoint...
+
+```{r eval=T}
+pbmc<-readRDS("../pbmc_data/pbmc_clust.rds")
+```
+
+## DE analysis
+
+```{r eval=T,warning=FALSE,message=FALSE}
+DefaultAssay(pbmc) <- "RNA"
+# cluster 0 vs all others
+# this can take several minutes
+cluster0.markers <- FindMarkers(object = pbmc, ident.1 = 0, min.pct = 0.1)
+print(x = head(x = cluster0.markers, n = 5))
+
+```
+
+In the code below, we can also use FindAllMarkers function to automate this process for all clusters. This compares 0 with all other clusters, 1 with all other clusters, etc. Note here that we have specified that min.pct =0.25 , as we want the log(fold-change) threshold for a gene to be at least 0.25 to be identified as significant. Then we select the top 15 markers for each cluster, based on log(fold-changes, but it will take long time to finish.
+
+```{r eval=F}
+DefaultAssay(pbmc) <- "RNA"
+# find markers for every cluster compared to all remaining cells, report only the positive ones
+# FindAllMarkers can take long time to run
+allmarkers <-FindAllMarkers(pbmc, only.pos = FALSE, min.pct = 0.25, logfc.threshold = 0.25,assay="RNA",slot="scale.data")
+
+library(dplyr)
+allmarkers_grouped<- allmarkers %>%
+    group_by(cluster) %>% slice_max(n = 1, order_by = avg_diff)
+fwrite(as.data.frame(allmarkers_grouped),file="../pbmc_data/DE_markers.txt",sep="\t",row.names = F,col.names = T)
+
+```
+
+```{r}
+allmarkers_grouped<-fread("../pbmc_data/DE_markers.txt")
+# plot
+features<-unique(allmarkers_grouped$gene)
+
+StackedVlnPlot(obj = pbmc, features = features,slot = "counts", cols=my_cols)
+VlnPlot(pbmc, features = c("TSHZ2","LEF1"),slot = "counts", log = TRUE, pt.size=0)
+
+FeaturePlot(pbmc, features = c("LEF1", "FHIT", "LTB", "NELL2", "AFF3", "BANK1", "VCAN", "FCGR3A", "TCF4"))
+
+```
+
+## Cell type annotation
 
 We annotate the clusters below. Note that you could also annotate the dataset using supervised mapping pipelines or automated web tool, [Azimuth](https://satijalab.org/azimuth/).
 
@@ -28,15 +86,18 @@ transfer_anchors <- FindTransferAnchors(
   reference = reference, query = pbmc, 
 	reference.reduction="spca", normalization.method = "SCT", 
 	dims = 1:50 )
+```
 
+MapQuery() is a wrapper around three functions: TransferData(), IntegrateEmbeddings(), and ProjectUMAP(). TransferData() is used to transfer cell type labels and impute the ADT values. IntegrateEmbeddings() and ProjectUMAP() are used to project the query data onto the UMAP structure of the reference. 
+
+```{r}
 # MapQuery() is a wrapper around three functions: TransferData(), IntegrateEmbeddings(), and ProjectUMAP()
 pbmc <- MapQuery(
   anchorset = transfer_anchors,
   query = pbmc,
   reference = reference,
   refdata = list(
-    celltype.l1 = "celltype.l1",
-    celltype.l2 = "celltype.l2",
+    celltype = "celltype.l2",
     predicted_ADT = "ADT"
   ),
   reference.reduction = "spca", # reference has different types of reduction performed, pca, spca, umap ,etc.
@@ -57,7 +118,7 @@ saveRDS(pbmc,file="pbmc_anno.rds")
 # pbmc<-readRDS("../pbmc_data/pbmc_anno.rds")
 ```
 
-```{r eval=T,fig.cap='Clusters for annotated cell types', out.width='100%', fig.asp=.75, fig.align='center'}
+```{r eval=T,fig.cap='Clusters for annotated cell types', out.width='150%', fig.asp=.6, fig.align='center'}
 # plot on reference data space
 p1<-DimPlot(pbmc, reduction = "ref.umap", group.by = "predicted.celltype.l2", label = TRUE, label.size = 3 ,repel = TRUE)
 # plot on wnn space

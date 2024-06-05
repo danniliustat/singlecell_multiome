@@ -1,0 +1,195 @@
+# Peak calling and Motif analysis
+
+```{r eval=T, echo=F}
+pbmc<-readRDS("../pbmc_data/pbmc_anno_new.rds")
+```
+
+## Linkage plot
+
+```{r eval=T,warning=FALSE,message=FALSE}
+DefaultAssay(pbmc) <- "ATAC"
+# first compute the GC content for each peak
+pbmc <- RegionStats(pbmc, genome = BSgenome.Hsapiens.UCSC.hg38)
+# link peaks to genes
+pbmc <- LinkPeaks(
+  object = pbmc,
+  peak.assay = "ATAC",
+  expression.assay = "RNA",
+  genes.use = c("LYZ", "MS4A1")
+)
+
+```
+
+```{r eval=T,echo=F, fig.cap='Linkage plot for gene MS4A1 and LYZ', out.width='100%', fig.asp=1.2, fig.align='center'}
+Idents(pbmc)<-"predicted.celltype.l2"
+idents.plot <- c("B naive", "B intermediate", "B memory",
+                 "CD14 Mono", "CD16 Mono", "CD8 TEM", "CD8 Naive")
+
+p1 <- CoveragePlot(
+  object = pbmc,
+  region = "MS4A1",
+  features = "MS4A1",
+  expression.assay = "RNA",
+  idents = idents.plot,
+  extend.upstream = 500,
+  extend.downstream = 10000
+)
+
+p2 <- CoveragePlot(
+  object = pbmc,
+  region = "LYZ",
+  features = "LYZ",
+  expression.assay = "RNA",
+  idents = idents.plot,
+  extend.upstream = 8000,
+  extend.downstream = 5000
+)
+
+patchwork::wrap_plots(p1, p2, ncol = 1)
+
+```
+
+## Call peaks using MACS2
+Need to install MACS2 in advance `pip install MACS2`. Recall peaks by celltype.
+
+Peak calling can be performed using the CallPeaks() function, and can either be done separately for different groups of cells, or performed using data from all the cells. To call peaks on each annotated cell type, we can use the group.by argument:
+
+```{r eval=FALSE}
+# this could take a long time because it runs for each cell type
+peaks <- CallPeaks(
+  object = pbmc,
+  group.by = "predicted.celltype.l2"
+)
+
+```
+
+```{r eval=F,echo=T,warning=FALSE,message=FALSE,out.width='100%', fig.asp=0.9, fig.align='center'}
+CoveragePlot(
+  object = pbmc,
+  region = "CD8A",
+  ranges = peaks,
+  ranges.title = "MACS2"
+)
+
+```
+
+
+
+## Motif analysis
+Adding motif information to the Seurat object
+To add the DNA sequence motif information required for motif analyses, we can run the AddMotifs() function:
+
+```{r}
+# add motif information
+library(TFBSTools)
+library(JASPAR2020)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(BiocParallel)
+library(motifmatchr)
+register(SerialParam())
+
+pfm <- getMatrixSet(
+  x = JASPAR2020,
+  opts = list(species = 9606, all_versions = FALSE)
+)
+
+pbmc <- AddMotifs(
+  object = pbmc,
+  genome = BSgenome.Hsapiens.UCSC.hg38,
+  pfm = pfm,
+  assay = "ATAC",
+  verbose = TRUE
+)
+#pbmc[["ATAC"]]@motifs
+```
+
+
+To identify potentially important cell-type-specific regulatory sequences, we can search for DNA motifs that are overrepresented in a set of peaks that are differentially accessible between cell types.
+
+Here, we find differentially accessible peaks between Pvalb and Sst inhibitory interneurons. For sparse data (such as scATAC-seq), we find it is often necessary to lower the min.pct threshold in FindMarkers() from the default (0.1, which was designed for scRNA-seq data).
+
+We then perform a hypergeometric test to test the probability of observing the motif at the given frequency by chance, comparing with a background set of peaks matched for GC content.
+
+
+```{r}
+da_peaks <- FindMarkers(
+  object = pbmc,
+  ident.1 = 'CD8 TEM',
+  ident.2 = 'B memory',
+  only.pos = TRUE,
+  test.use = 'LR',
+  min.pct = 0.05,
+  latent.vars = 'nCount_ATAC'
+)
+
+# get top differentially accessible peaks
+top.da.peak <- rownames(da_peaks[da_peaks$p_val < 0.005 & da_peaks$pct.1 > 0.2, ])
+
+
+# test enrichment
+enriched.motifs <- FindMotifs(
+  object = pbmc,
+  features = top.da.peak
+)
+```
+
+We can also plot the position weight matrices for the motifs, so we can visualize the different motif sequences.
+```{r eval=T,fig.cap='Motifs', out.width='150%', fig.asp=.6, fig.align='center'}
+MotifPlot(
+  object = pbmc,
+  motifs = head(rownames(enriched.motifs))
+)
+
+
+```
+
+
+
+```{r eval=F, echo=F}
+## codes for reconstruct pbmc if needed
+pbmc<-readRDS("../pbmc_data/pbmc_anno.rds")
+
+annotation <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
+seqlevelsStyle(annotation) <- "UCSC"
+genome(annotation) <- "hg38"
+# reconstruct seurat object
+pbmc_new<- CreateSeuratObject(
+  counts = pbmc[["RNA"]]$counts,min.cells=1,
+  assay = "RNA", meta.data = pbmc@meta.data, project = "pbmc"
+)
+# add ATAC
+fragpath <- "../pbmc_data/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz"
+pbmc_new[["ATAC"]] <- CreateChromatinAssay(
+  counts = pbmc[["ATAC"]]$counts,
+  sep = c(":", "-"),
+  fragments = fragpath,
+  annotation = annotation
+)
+pbmc<-pbmc_new
+
+#redo normalization and clustering
+DefaultAssay(pbmc) <- "RNA"
+pbmc<-NormalizeData(object = pbmc, normalization.method = "LogNormalize", scale.factor = 1000000)
+pbmc <- FindVariableFeatures(object = pbmc, selection.method ="vst", 
+                                 mean.cutoff = c(0.1,6), dispersion.cutoff = c(0.5,Inf),verbose=TRUE)
+pbmc <- ScaleData(object = pbmc)
+pbmc <- RunPCA(pbmc) 
+pbmc <- FindNeighbors(pbmc, dims = 1:50,force.recalc = T)
+pbmc <- FindClusters(pbmc, algorithm = 3, resolution = 0.7, group.singletons=T)
+pbmc<-RunUMAP(object = pbmc, dims = 1:50, reduction.name = "umap.rna", reduction.key = 'rnaUMAP_',
+                    min.dist=0.3, spread=0.5,assay="SCT",slot="scale.data")
+
+DefaultAssay(pbmc) <- "ATAC"
+pbmc <- RunTFIDF(pbmc)
+pbmc <- FindTopFeatures(pbmc, min.cutoff = 'q0')
+pbmc <- RunSVD(pbmc)
+pbmc <- RunUMAP(pbmc, reduction = 'lsi', dims = 2:50, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
+
+pbmc <- FindMultiModalNeighbors(pbmc, reduction.list = list("pca", "lsi"), dims.list = list(1:50, 2:50))
+pbmc <- RunUMAP(pbmc, nn.name = "weighted.nn", reduction.name = "wnn.umap", reduction.key = "wnnUMAP_",min.dist=0.3, spread=0.5)
+pbmc <- FindClusters(pbmc, graph.name = "wsnn", algorithm = 3, resolution = 0.6, group.singletons=T,verbose = FALSE)
+
+saveRDS(pbmc,file="../pbmc_data/pbmc_anno_new.rds")
+```
+
+

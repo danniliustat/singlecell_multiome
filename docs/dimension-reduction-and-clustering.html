@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="normalization-and-cell-cycle-correction.html"/>
-<link rel="next" href="cell-type-annotation.html"/>
+<link rel="next" href="differential-expression-de-analysis.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -146,11 +146,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#server-environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Server environment requirements</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#r-libraries"><i class="fa fa-check"></i><b>1.3</b> R libraries</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#construct-folder-structure"><i class="fa fa-check"></i><b>1.4</b> Construct folder structure</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#downloading-fastq-files"><i class="fa fa-check"></i><b>1.5</b> Downloading FASTQ files</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="cellranger_arc.html"><a href="cellranger_arc.html"><i class="fa fa-check"></i><b>2</b> Cell Ranger ARC for preprocessing sequencing data</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="cellranger_arc.html"><a href="cellranger_arc.html#bcl-naming-convention-and-csv-sample-sheet"><i class="fa fa-check"></i><b>2.1</b> BCL naming convention and CSV sample sheet</a></li>
-<li class="chapter" data-level="2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-mkfastq"><i class="fa fa-check"></i><b>2.2</b> <code>cellranger-arc mkfastq</code></a></li>
+<li class="chapter" data-level="2.1" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-mkfastq"><i class="fa fa-check"></i><b>2.1</b> <code>cellranger-arc mkfastq</code></a></li>
+<li class="chapter" data-level="2.2" data-path="cellranger_arc.html"><a href="cellranger_arc.html#bcl-naming-convention"><i class="fa fa-check"></i><b>2.2</b> BCL naming convention</a></li>
 <li class="chapter" data-level="2.3" data-path="cellranger_arc.html"><a href="cellranger_arc.html#cellranger-arc-count"><i class="fa fa-check"></i><b>2.3</b> <code>cellranger-arc count</code></a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="seuratqc.html"><a href="seuratqc.html"><i class="fa fa-check"></i><b>3</b> Obtain data and perform QC using Seurat</a>
@@ -170,18 +171,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#dimension-reduction"><i class="fa fa-check"></i><b>5.2</b> Dimension reduction</a></li>
 <li class="chapter" data-level="5.3" data-path="dimension-reduction-and-clustering.html"><a href="dimension-reduction-and-clustering.html#clustering-and-joint-clustering"><i class="fa fa-check"></i><b>5.3</b> Clustering and joint clustering</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="cell-type-annotation.html"><a href="cell-type-annotation.html"><i class="fa fa-check"></i><b>6</b> Cell type annotation</a></li>
+<li class="chapter" data-level="6" data-path="differential-expression-de-analysis.html"><a href="differential-expression-de-analysis.html"><i class="fa fa-check"></i><b>6</b> Differential Expression (DE) analysis</a></li>
 <li class="chapter" data-level="7" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>7</b> Applications</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>7.1</b> Example one</a></li>
 <li class="chapter" data-level="7.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>7.2</b> Example two</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="applications-1.html"><a href="applications-1.html"><i class="fa fa-check"></i><b>8</b> Applications</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="applications-1.html"><a href="applications-1.html#example-one-1"><i class="fa fa-check"></i><b>8.1</b> Example one</a></li>
-<li class="chapter" data-level="8.2" data-path="applications-1.html"><a href="applications-1.html#example-two-1"><i class="fa fa-check"></i><b>8.2</b> Example two</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="data-integration.html"><a href="data-integration.html"><i class="fa fa-check"></i><b>9</b> Data integration</a></li>
+<li class="chapter" data-level="8" data-path="data-integration.html"><a href="data-integration.html"><i class="fa fa-check"></i><b>8</b> Data integration</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -212,9 +208,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-3"><a href="dimension-reduction-and-clustering.html#cb1-3" tabindex="-1"></a>                                 <span class="at">mean.cutoff =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">6</span>), <span class="at">dispersion.cutoff =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="cn">Inf</span>),<span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
 <span id="cb1-4"><a href="dimension-reduction-and-clustering.html#cb1-4" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">VariableFeatures</span>(pbmc))</span>
 <span id="cb1-5"><a href="dimension-reduction-and-clustering.html#cb1-5" tabindex="-1"></a><span class="co"># [1] 2000 # return top 2000 variable features by default</span></span></code></pre></div>
-<pre><code>##  [1] &quot;GNLY&quot;   &quot;IGKC&quot;   &quot;IGHM&quot;   &quot;PTGDS&quot;  &quot;BANK1&quot;  &quot;TCF4&quot;   &quot;IGLC3&quot;  &quot;JCHAIN&quot;
-##  [9] &quot;IGLC2&quot;  &quot;CCL5&quot;</code></pre>
+<pre><code>##  [1] &quot;JCHAIN&quot;  &quot;PTGDS&quot;   &quot;IGKC&quot;    &quot;IGHA1&quot;   &quot;TXNDC5&quot;  &quot;TCF4&quot;    &quot;SOX5&quot;   
+##  [8] &quot;MZB1&quot;    &quot;ZNF385D&quot; &quot;CDKN1C&quot;</code></pre>
 <pre><code>## When using repel, set xnudge and ynudge to 0 for optimal results</code></pre>
+<pre><code>## Warning in scale_x_log10(): log-10 transformation introduced infinite values.
+## log-10 transformation introduced infinite values.</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-4-1.png" alt="Label the top 10 variable features" width="100%" />
 <p class="caption">
@@ -225,33 +223,33 @@ Figure 5.1: Label the top 10 variable features
 <div id="dimension-reduction" class="section level2 hasAnchor" number="5.2">
 <h2><span class="header-section-number">5.2</span> Dimension reduction<a href="dimension-reduction-and-clustering.html#dimension-reduction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Run separately for RNA and ATAC. <code>min.dist</code> and <code>spread</code> controls how tightly the points are clustered.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="dimension-reduction-and-clustering.html#cb4-1" tabindex="-1"></a><span class="co"># RNA analysis</span></span>
-<span id="cb4-2"><a href="dimension-reduction-and-clustering.html#cb4-2" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
-<span id="cb4-3"><a href="dimension-reduction-and-clustering.html#cb4-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(pbmc) </span>
-<span id="cb4-4"><a href="dimension-reduction-and-clustering.html#cb4-4" tabindex="-1"></a><span class="fu">DimPlot</span>(<span class="at">object =</span> pbmc)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="dimension-reduction-and-clustering.html#cb5-1" tabindex="-1"></a><span class="co"># RNA analysis</span></span>
+<span id="cb5-2"><a href="dimension-reduction-and-clustering.html#cb5-2" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
+<span id="cb5-3"><a href="dimension-reduction-and-clustering.html#cb5-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(pbmc) </span>
+<span id="cb5-4"><a href="dimension-reduction-and-clustering.html#cb5-4" tabindex="-1"></a><span class="fu">DimPlot</span>(<span class="at">object =</span> pbmc)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="dimension-reduction-and-clustering.html#cb5-1" tabindex="-1"></a><span class="co"># determin if cell cycle has major variation</span></span>
-<span id="cb5-2"><a href="dimension-reduction-and-clustering.html#cb5-2" tabindex="-1"></a><span class="co"># Running a PCA on cell cycle genes reveals</span></span>
-<span id="cb5-3"><a href="dimension-reduction-and-clustering.html#cb5-3" tabindex="-1"></a><span class="fu">DimPlot</span>(pbmc,<span class="at">reduction =</span> <span class="st">&quot;pca&quot;</span>,<span class="at">group.by=</span> <span class="st">&quot;Phase&quot;</span>,<span class="at">split.by =</span> <span class="st">&quot;Phase&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="dimension-reduction-and-clustering.html#cb6-1" tabindex="-1"></a><span class="co"># determin if cell cycle has major variation</span></span>
+<span id="cb6-2"><a href="dimension-reduction-and-clustering.html#cb6-2" tabindex="-1"></a><span class="co"># Running a PCA on cell cycle genes reveals</span></span>
+<span id="cb6-3"><a href="dimension-reduction-and-clustering.html#cb6-3" tabindex="-1"></a><span class="fu">DimPlot</span>(pbmc,<span class="at">reduction =</span> <span class="st">&quot;pca&quot;</span>,<span class="at">group.by=</span> <span class="st">&quot;Phase&quot;</span>,<span class="at">split.by =</span> <span class="st">&quot;Phase&quot;</span>)</span></code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
 <p>Other visualization figures for determining dimensionality:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="dimension-reduction-and-clustering.html#cb6-1" tabindex="-1"></a><span class="co"># visualize the top genes associated with reduction components for the first 2 PCs</span></span>
-<span id="cb6-2"><a href="dimension-reduction-and-clustering.html#cb6-2" tabindex="-1"></a><span class="fu">VizDimLoadings</span>(<span class="at">object =</span> pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="dimension-reduction-and-clustering.html#cb7-1" tabindex="-1"></a><span class="co"># visualize the top genes associated with reduction components for the first 2 PCs</span></span>
+<span id="cb7-2"><a href="dimension-reduction-and-clustering.html#cb7-2" tabindex="-1"></a><span class="fu">VizDimLoadings</span>(<span class="at">object =</span> pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-6-1.png" alt="Variations in top genes for the first two PCs" width="100%" />
 <p class="caption">
 Figure 5.2: Variations in top genes for the first two PCs
 </p>
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="dimension-reduction-and-clustering.html#cb7-1" tabindex="-1"></a><span class="co"># use heatmap</span></span>
-<span id="cb7-2"><a href="dimension-reduction-and-clustering.html#cb7-2" tabindex="-1"></a><span class="fu">DimHeatmap</span>(<span class="at">object =</span> pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">cells =</span> <span class="dv">500</span>, <span class="at">balanced =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="dimension-reduction-and-clustering.html#cb8-1" tabindex="-1"></a><span class="co"># use heatmap</span></span>
+<span id="cb8-2"><a href="dimension-reduction-and-clustering.html#cb8-2" tabindex="-1"></a><span class="fu">DimHeatmap</span>(<span class="at">object =</span> pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">cells =</span> <span class="dv">500</span>, <span class="at">balanced =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-7-1.png" alt="Heatmap for visualizing heterogeneity in PCs" width="100%" />
 <p class="caption">
 Figure 5.3: Heatmap for visualizing heterogeneity in PCs
 </p>
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="dimension-reduction-and-clustering.html#cb8-1" tabindex="-1"></a><span class="fu">ElbowPlot</span>(<span class="at">object =</span> pbmc)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="dimension-reduction-and-clustering.html#cb9-1" tabindex="-1"></a><span class="fu">ElbowPlot</span>(<span class="at">object =</span> pbmc)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-8-1.png" alt="Checking elbow plot is the most common way for determining dimensionality" width="100%" />
 <p class="caption">
@@ -259,41 +257,41 @@ Figure 5.4: Checking elbow plot is the most common way for determining dimension
 </p>
 </div>
 <p>We will do dimension reduction for scATAC-seq as well.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="dimension-reduction-and-clustering.html#cb9-1" tabindex="-1"></a><span class="co"># ATAC analysis</span></span>
-<span id="cb9-2"><a href="dimension-reduction-and-clustering.html#cb9-2" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;ATAC&quot;</span></span>
-<span id="cb9-3"><a href="dimension-reduction-and-clustering.html#cb9-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunTFIDF</span>(pbmc)</span>
-<span id="cb9-4"><a href="dimension-reduction-and-clustering.html#cb9-4" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindTopFeatures</span>(pbmc, <span class="at">min.cutoff =</span> <span class="st">&#39;q0&#39;</span>)</span>
-<span id="cb9-5"><a href="dimension-reduction-and-clustering.html#cb9-5" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunSVD</span>(pbmc)</span>
-<span id="cb9-6"><a href="dimension-reduction-and-clustering.html#cb9-6" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(pbmc, <span class="at">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="at">dims =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">reduction.name =</span> <span class="st">&quot;umap.atac&quot;</span>, <span class="at">reduction.key =</span> <span class="st">&quot;atacUMAP_&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="dimension-reduction-and-clustering.html#cb10-1" tabindex="-1"></a><span class="co"># ATAC analysis</span></span>
+<span id="cb10-2"><a href="dimension-reduction-and-clustering.html#cb10-2" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;ATAC&quot;</span></span>
+<span id="cb10-3"><a href="dimension-reduction-and-clustering.html#cb10-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunTFIDF</span>(pbmc)</span>
+<span id="cb10-4"><a href="dimension-reduction-and-clustering.html#cb10-4" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindTopFeatures</span>(pbmc, <span class="at">min.cutoff =</span> <span class="st">&#39;q0&#39;</span>)</span>
+<span id="cb10-5"><a href="dimension-reduction-and-clustering.html#cb10-5" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunSVD</span>(pbmc)</span>
+<span id="cb10-6"><a href="dimension-reduction-and-clustering.html#cb10-6" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(pbmc, <span class="at">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="at">dims =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">reduction.name =</span> <span class="st">&quot;umap.atac&quot;</span>, <span class="at">reduction.key =</span> <span class="st">&quot;atacUMAP_&quot;</span>)</span></code></pre></div>
 </div>
 <div id="clustering-and-joint-clustering" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Clustering and joint clustering<a href="dimension-reduction-and-clustering.html#clustering-and-joint-clustering" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Clustering based on RNA assay. Play around with different resolutions.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="dimension-reduction-and-clustering.html#cb10-1" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
-<span id="cb10-2"><a href="dimension-reduction-and-clustering.html#cb10-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>,<span class="at">force.recalc =</span> T)</span>
-<span id="cb10-3"><a href="dimension-reduction-and-clustering.html#cb10-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">algorithm =</span> <span class="dv">3</span>, <span class="at">resolution =</span> <span class="fl">0.7</span>, <span class="at">group.singletons=</span>T)</span>
-<span id="cb10-4"><a href="dimension-reduction-and-clustering.html#cb10-4" tabindex="-1"></a>pbmc<span class="ot">&lt;-</span><span class="fu">RunUMAP</span>(<span class="at">object =</span> pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">reduction.name =</span> <span class="st">&quot;umap.rna&quot;</span>, <span class="at">reduction.key =</span> <span class="st">&#39;rnaUMAP_&#39;</span>,</span>
-<span id="cb10-5"><a href="dimension-reduction-and-clustering.html#cb10-5" tabindex="-1"></a>                    <span class="at">min.dist=</span><span class="fl">0.3</span>, <span class="at">spread=</span><span class="fl">0.5</span>,<span class="at">assay=</span><span class="st">&quot;SCT&quot;</span>,<span class="at">slot=</span><span class="st">&quot;scale.data&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="dimension-reduction-and-clustering.html#cb11-1" tabindex="-1"></a><span class="fu">DimPlot</span>(pbmc, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>, <span class="at">reduction =</span> <span class="st">&quot;umap.rna&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-11"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-11-1.png" alt="Resolution=0.7" width="100%" />
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="dimension-reduction-and-clustering.html#cb11-1" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
+<span id="cb11-2"><a href="dimension-reduction-and-clustering.html#cb11-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>,<span class="at">force.recalc =</span> T)</span>
+<span id="cb11-3"><a href="dimension-reduction-and-clustering.html#cb11-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">algorithm =</span> <span class="dv">3</span>, <span class="at">resolution =</span> <span class="fl">0.7</span>, <span class="at">group.singletons=</span>T)</span>
+<span id="cb11-4"><a href="dimension-reduction-and-clustering.html#cb11-4" tabindex="-1"></a>pbmc<span class="ot">&lt;-</span><span class="fu">RunUMAP</span>(<span class="at">object =</span> pbmc, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">reduction.name =</span> <span class="st">&quot;umap.rna&quot;</span>, <span class="at">reduction.key =</span> <span class="st">&#39;rnaUMAP_&#39;</span>,</span>
+<span id="cb11-5"><a href="dimension-reduction-and-clustering.html#cb11-5" tabindex="-1"></a>                    <span class="at">min.dist=</span><span class="fl">0.3</span>, <span class="at">spread=</span><span class="fl">0.5</span>,<span class="at">assay=</span><span class="st">&quot;SCT&quot;</span>,<span class="at">slot=</span><span class="st">&quot;scale.data&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="dimension-reduction-and-clustering.html#cb12-1" tabindex="-1"></a><span class="fu">DimPlot</span>(pbmc, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>, <span class="at">reduction =</span> <span class="st">&quot;umap.rna&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-12"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-12-1.png" alt="Resolution=0.7" width="100%" />
 <p class="caption">
 Figure 5.5: Resolution=0.7
 </p>
 </div>
 <p>Generate a resolution tree for res=0.1 to 1.5 to select a suitable resolution.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="dimension-reduction-and-clustering.html#cb12-1" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
-<span id="cb12-2"><a href="dimension-reduction-and-clustering.html#cb12-2" tabindex="-1"></a>resolutions <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">1.5</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
-<span id="cb12-3"><a href="dimension-reduction-and-clustering.html#cb12-3" tabindex="-1"></a><span class="co"># Initialize a list to store the clustering results</span></span>
-<span id="cb12-4"><a href="dimension-reduction-and-clustering.html#cb12-4" tabindex="-1"></a>clustering.list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb12-5"><a href="dimension-reduction-and-clustering.html#cb12-5" tabindex="-1"></a><span class="co"># Loop over the resolution values and perform clustering</span></span>
-<span id="cb12-6"><a href="dimension-reduction-and-clustering.html#cb12-6" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(resolutions)){</span>
-<span id="cb12-7"><a href="dimension-reduction-and-clustering.html#cb12-7" tabindex="-1"></a>    <span class="co"># Run the FindClusters function with the resolution parameter</span></span>
-<span id="cb12-8"><a href="dimension-reduction-and-clustering.html#cb12-8" tabindex="-1"></a>    pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">algorithm =</span> <span class="dv">3</span>, <span class="at">resolution =</span> resolutions[i], <span class="at">group.singletons=</span>T, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-9"><a href="dimension-reduction-and-clustering.html#cb12-9" tabindex="-1"></a>    <span class="co"># Store the cluster labels in the list</span></span>
-<span id="cb12-10"><a href="dimension-reduction-and-clustering.html#cb12-10" tabindex="-1"></a>    clustering.list[[i]] <span class="ot">&lt;-</span> <span class="fu">Idents</span>(pbmc) </span>
-<span id="cb12-11"><a href="dimension-reduction-and-clustering.html#cb12-11" tabindex="-1"></a>    <span class="fu">print</span>(i)</span>
-<span id="cb12-12"><a href="dimension-reduction-and-clustering.html#cb12-12" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="dimension-reduction-and-clustering.html#cb13-1" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
+<span id="cb13-2"><a href="dimension-reduction-and-clustering.html#cb13-2" tabindex="-1"></a>resolutions <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">1.5</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
+<span id="cb13-3"><a href="dimension-reduction-and-clustering.html#cb13-3" tabindex="-1"></a><span class="co"># Initialize a list to store the clustering results</span></span>
+<span id="cb13-4"><a href="dimension-reduction-and-clustering.html#cb13-4" tabindex="-1"></a>clustering.list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb13-5"><a href="dimension-reduction-and-clustering.html#cb13-5" tabindex="-1"></a><span class="co"># Loop over the resolution values and perform clustering</span></span>
+<span id="cb13-6"><a href="dimension-reduction-and-clustering.html#cb13-6" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(resolutions)){</span>
+<span id="cb13-7"><a href="dimension-reduction-and-clustering.html#cb13-7" tabindex="-1"></a>    <span class="co"># Run the FindClusters function with the resolution parameter</span></span>
+<span id="cb13-8"><a href="dimension-reduction-and-clustering.html#cb13-8" tabindex="-1"></a>    pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">algorithm =</span> <span class="dv">3</span>, <span class="at">resolution =</span> resolutions[i], <span class="at">group.singletons=</span>T, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-9"><a href="dimension-reduction-and-clustering.html#cb13-9" tabindex="-1"></a>    <span class="co"># Store the cluster labels in the list</span></span>
+<span id="cb13-10"><a href="dimension-reduction-and-clustering.html#cb13-10" tabindex="-1"></a>    clustering.list[[i]] <span class="ot">&lt;-</span> <span class="fu">Idents</span>(pbmc) </span>
+<span id="cb13-11"><a href="dimension-reduction-and-clustering.html#cb13-11" tabindex="-1"></a>    <span class="fu">print</span>(i)</span>
+<span id="cb13-12"><a href="dimension-reduction-and-clustering.html#cb13-12" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 ## 
 ## Number of nodes: 10413
@@ -312,7 +310,7 @@ Figure 5.5: Resolution=0.7
 ## Running smart local moving algorithm...
 ## Maximum modularity in 10 random starts: 0.9444
 ## Number of communities: 10
-## Elapsed time: 7 seconds
+## Elapsed time: 6 seconds
 ## [1] 2
 ## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 ## 
@@ -352,7 +350,7 @@ Figure 5.5: Resolution=0.7
 ## Running smart local moving algorithm...
 ## Maximum modularity in 10 random starts: 0.8869
 ## Number of communities: 14
-## Elapsed time: 5 seconds
+## Elapsed time: 6 seconds
 ## [1] 6
 ## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 ## 
@@ -362,7 +360,7 @@ Figure 5.5: Resolution=0.7
 ## Running smart local moving algorithm...
 ## Maximum modularity in 10 random starts: 0.8734
 ## Number of communities: 15
-## Elapsed time: 5 seconds
+## Elapsed time: 6 seconds
 ## [1] 7
 ## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 ## 
@@ -372,7 +370,7 @@ Figure 5.5: Resolution=0.7
 ## Running smart local moving algorithm...
 ## Maximum modularity in 10 random starts: 0.8618
 ## Number of communities: 17
-## Elapsed time: 5 seconds
+## Elapsed time: 6 seconds
 ## [1] 8
 ## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 ## 
@@ -402,7 +400,7 @@ Figure 5.5: Resolution=0.7
 ## Running smart local moving algorithm...
 ## Maximum modularity in 10 random starts: 0.8316
 ## Number of communities: 18
-## Elapsed time: 5 seconds
+## Elapsed time: 6 seconds
 ## [1] 11
 ## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 ## 
@@ -442,49 +440,63 @@ Figure 5.5: Resolution=0.7
 ## Running smart local moving algorithm...
 ## Maximum modularity in 10 random starts: 0.7984
 ## Number of communities: 21
-## Elapsed time: 5 seconds
+## Elapsed time: 4 seconds
 ## [1] 15</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="dimension-reduction-and-clustering.html#cb14-1" tabindex="-1"></a><span class="fu">names</span>(clustering.list)<span class="ot">&lt;-</span><span class="fu">paste0</span>(<span class="st">&quot;res_&quot;</span>,resolutions)</span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="dimension-reduction-and-clustering.html#cb15-1" tabindex="-1"></a><span class="co"># Load the clustree package</span></span>
-<span id="cb15-2"><a href="dimension-reduction-and-clustering.html#cb15-2" tabindex="-1"></a><span class="fu">library</span>(clustree)</span>
-<span id="cb15-3"><a href="dimension-reduction-and-clustering.html#cb15-3" tabindex="-1"></a>df<span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(clustering.list,as.factor))</span>
-<span id="cb15-4"><a href="dimension-reduction-and-clustering.html#cb15-4" tabindex="-1"></a><span class="co"># Plot the cluster tree for different resolution values</span></span>
-<span id="cb15-5"><a href="dimension-reduction-and-clustering.html#cb15-5" tabindex="-1"></a><span class="fu">clustree</span>(df, <span class="at">prefix =</span> <span class="st">&quot;res_&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-13-1.png" alt="Clusters based on RNA assay vs joint assays" width="100%" />
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="dimension-reduction-and-clustering.html#cb15-1" tabindex="-1"></a><span class="fu">names</span>(clustering.list)<span class="ot">&lt;-</span><span class="fu">paste0</span>(<span class="st">&quot;res_&quot;</span>,resolutions)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="dimension-reduction-and-clustering.html#cb16-1" tabindex="-1"></a><span class="co"># Load the clustree package</span></span>
+<span id="cb16-2"><a href="dimension-reduction-and-clustering.html#cb16-2" tabindex="-1"></a><span class="fu">library</span>(clustree)</span>
+<span id="cb16-3"><a href="dimension-reduction-and-clustering.html#cb16-3" tabindex="-1"></a>df<span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(clustering.list,as.factor))</span>
+<span id="cb16-4"><a href="dimension-reduction-and-clustering.html#cb16-4" tabindex="-1"></a><span class="co"># Plot the cluster tree for different resolution values</span></span>
+<span id="cb16-5"><a href="dimension-reduction-and-clustering.html#cb16-5" tabindex="-1"></a><span class="fu">clustree</span>(df, <span class="at">prefix =</span> <span class="st">&quot;res_&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-14-1.png" alt="Clusters based on RNA assay vs joint assays" width="100%" />
 <p class="caption">
 Figure 5.6: Clusters based on RNA assay vs joint assays
 </p>
 </div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="dimension-reduction-and-clustering.html#cb16-1" tabindex="-1"></a><span class="co"># We exclude the first dimension for ATAC as this is typically correlated with sequencing depth</span></span>
-<span id="cb16-2"><a href="dimension-reduction-and-clustering.html#cb16-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindMultiModalNeighbors</span>(pbmc, <span class="at">reduction.list =</span> <span class="fu">list</span>(<span class="st">&quot;pca&quot;</span>, <span class="st">&quot;lsi&quot;</span>), <span class="at">dims.list =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">50</span>))</span>
-<span id="cb16-3"><a href="dimension-reduction-and-clustering.html#cb16-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(pbmc, <span class="at">nn.name =</span> <span class="st">&quot;weighted.nn&quot;</span>, <span class="at">reduction.name =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">reduction.key =</span> <span class="st">&quot;wnnUMAP_&quot;</span>,<span class="at">min.dist=</span><span class="fl">0.3</span>, <span class="at">spread=</span><span class="fl">0.5</span>)</span>
-<span id="cb16-4"><a href="dimension-reduction-and-clustering.html#cb16-4" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">graph.name =</span> <span class="st">&quot;wsnn&quot;</span>, <span class="at">algorithm =</span> <span class="dv">3</span>, <span class="at">resolution =</span> <span class="fl">0.6</span>, <span class="at">group.singletons=</span>T,<span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p>You can further generate sub-clusters within large cluster to explore underlying structure</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="dimension-reduction-and-clustering.html#cb17-1" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindSubCluster</span>(pbmc, <span class="at">cluster =</span> <span class="dv">6</span>, <span class="at">graph.name =</span> <span class="st">&quot;wsnn&quot;</span>, <span class="at">algorithm =</span> <span class="dv">3</span>)</span>
-<span id="cb17-2"><a href="dimension-reduction-and-clustering.html#cb17-2" tabindex="-1"></a><span class="fu">Idents</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;sub.cluster&quot;</span></span></code></pre></div>
-<p>Compare: resolution=0.7 for RNA and resolution=0.6 for joint assays have similar number of clusters.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="dimension-reduction-and-clustering.html#cb18-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;RNA_snn_res.0.7&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA clusters&quot;</span>)</span>
-<span id="cb18-2"><a href="dimension-reduction-and-clustering.html#cb18-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;wsnn_res.0.6&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;WNN clusters&quot;</span>)</span>
-<span id="cb18-3"><a href="dimension-reduction-and-clustering.html#cb18-3" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">&amp;</span> <span class="fu">NoLegend</span>() <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-16-1.png" alt="Clusters based on RNA assay vs joint assays" width="100%" />
+<p>Compare: resolution=0.1, resolution=0.6 and resolution=1.1.
+s</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="dimension-reduction-and-clustering.html#cb17-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;RNA_snn_res.0.1&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA clusters res=0.1&quot;</span>)</span>
+<span id="cb17-2"><a href="dimension-reduction-and-clustering.html#cb17-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;RNA_snn_res.0.7&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA clusters res=0.7&quot;</span>)</span>
+<span id="cb17-3"><a href="dimension-reduction-and-clustering.html#cb17-3" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;RNA_snn_res.1.1&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA clusters res=1.1&quot;</span>)</span>
+<span id="cb17-4"><a href="dimension-reduction-and-clustering.html#cb17-4" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">&amp;</span> <span class="fu">NoLegend</span>() <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-15-1.png" alt="Clusters based on RNA assay vs joint assays" width="250%" />
 <p class="caption">
 Figure 5.7: Clusters based on RNA assay vs joint assays
 </p>
 </div>
-<p>compare: same cluster distribution on different assay space.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="dimension-reduction-and-clustering.html#cb19-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;umap.rna&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA&quot;</span>)</span>
-<span id="cb19-2"><a href="dimension-reduction-and-clustering.html#cb19-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;umap.atac&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;ATAC&quot;</span>)</span>
-<span id="cb19-3"><a href="dimension-reduction-and-clustering.html#cb19-3" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;WNN&quot;</span>)</span>
-<span id="cb19-4"><a href="dimension-reduction-and-clustering.html#cb19-4" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">&amp;</span> <span class="fu">NoLegend</span>() <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-17"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-17-1.png" alt="Clusters for single assay UMAP space vs joint assay space" width="100%" />
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="dimension-reduction-and-clustering.html#cb18-1" tabindex="-1"></a><span class="co"># We exclude the first dimension for ATAC as this is typically correlated with sequencing depth</span></span>
+<span id="cb18-2"><a href="dimension-reduction-and-clustering.html#cb18-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindMultiModalNeighbors</span>(pbmc, <span class="at">reduction.list =</span> <span class="fu">list</span>(<span class="st">&quot;pca&quot;</span>, <span class="st">&quot;lsi&quot;</span>), <span class="at">dims.list =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">50</span>))</span>
+<span id="cb18-3"><a href="dimension-reduction-and-clustering.html#cb18-3" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(pbmc, <span class="at">nn.name =</span> <span class="st">&quot;weighted.nn&quot;</span>, <span class="at">reduction.name =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">reduction.key =</span> <span class="st">&quot;wnnUMAP_&quot;</span>,<span class="at">min.dist=</span><span class="fl">0.3</span>, <span class="at">spread=</span><span class="fl">0.5</span>)</span>
+<span id="cb18-4"><a href="dimension-reduction-and-clustering.html#cb18-4" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(pbmc, <span class="at">graph.name =</span> <span class="st">&quot;wsnn&quot;</span>, <span class="at">algorithm =</span> <span class="dv">3</span>, <span class="at">resolution =</span> <span class="fl">0.6</span>, <span class="at">group.singletons=</span>T,<span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>You can further generate sub-clusters within large cluster to explore underlying structure</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="dimension-reduction-and-clustering.html#cb19-1" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">FindSubCluster</span>(pbmc, <span class="at">cluster =</span> <span class="dv">6</span>, <span class="at">graph.name =</span> <span class="st">&quot;wsnn&quot;</span>, <span class="at">algorithm =</span> <span class="dv">3</span>)</span>
+<span id="cb19-2"><a href="dimension-reduction-and-clustering.html#cb19-2" tabindex="-1"></a><span class="fu">Idents</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;sub.cluster&quot;</span></span></code></pre></div>
+<p>Compare: resolution=0.7 for RNA and resolution=0.6 for joint assays have similar number of clusters.
+s</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="dimension-reduction-and-clustering.html#cb20-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;RNA_snn_res.0.7&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA clusters&quot;</span>)</span>
+<span id="cb20-2"><a href="dimension-reduction-and-clustering.html#cb20-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;wsnn_res.0.6&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;WNN clusters&quot;</span>)</span>
+<span id="cb20-3"><a href="dimension-reduction-and-clustering.html#cb20-3" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">&amp;</span> <span class="fu">NoLegend</span>() <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-18"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-18-1.png" alt="Clusters based on RNA assay vs joint assays" width="150%" />
 <p class="caption">
-Figure 5.8: Clusters for single assay UMAP space vs joint assay space
+Figure 5.8: Clusters based on RNA assay vs joint assays
 </p>
 </div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="dimension-reduction-and-clustering.html#cb20-1" tabindex="-1"></a><span class="fu">saveRDS</span>(pbmc,<span class="at">file=</span><span class="st">&quot;pbmc_clust.rds&quot;</span>)</span></code></pre></div>
+<p>compare: same cluster distribution on different assay space.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="dimension-reduction-and-clustering.html#cb21-1" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;umap.rna&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;RNA&quot;</span>)</span>
+<span id="cb21-2"><a href="dimension-reduction-and-clustering.html#cb21-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;umap.atac&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;ATAC&quot;</span>)</span>
+<span id="cb21-3"><a href="dimension-reduction-and-clustering.html#cb21-3" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">DimPlot</span>(pbmc, <span class="at">reduction =</span> <span class="st">&quot;wnn.umap&quot;</span>, <span class="at">group.by =</span> <span class="st">&quot;seurat_clusters&quot;</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">label.size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;WNN&quot;</span>)</span>
+<span id="cb21-4"><a href="dimension-reduction-and-clustering.html#cb21-4" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3 <span class="sc">&amp;</span> <span class="fu">NoLegend</span>() <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-19-1.png" alt="Clusters for single assay UMAP space vs joint assay space" width="250%" />
+<p class="caption">
+Figure 5.9: Clusters for single assay UMAP space vs joint assay space
+</p>
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="dimension-reduction-and-clustering.html#cb22-1" tabindex="-1"></a><span class="fu">saveRDS</span>(pbmc,<span class="at">file=</span><span class="st">&quot;pbmc_clust.rds&quot;</span>)</span></code></pre></div>
+
 </div>
 </div>
             </section>
@@ -493,7 +505,7 @@ Figure 5.8: Clusters for single assay UMAP space vs joint assay space
         </div>
       </div>
 <a href="normalization-and-cell-cycle-correction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="cell-type-annotation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="differential-expression-de-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

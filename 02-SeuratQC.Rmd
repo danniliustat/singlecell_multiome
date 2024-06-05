@@ -39,6 +39,7 @@ library(cowplot)
 library(hdf5r)
 library(dplyr)
 library(patchwork)
+library(clustree)
 ```
 
 Also set working directory to the folder where you saved your downloaded datasets.
