@@ -47,7 +47,7 @@ Also set working directory to the folder where you saved your downloaded dataset
 getwd()
 
 # set working directory
-setwd("/path/to/pbmc_data")
+setwd("/dfs6/pub/your_user_name")
 getwd() # check again
 ```
 

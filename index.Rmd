@@ -80,6 +80,15 @@ ls # list all files
 
 ```
 
+## Downloading FASTQ files
+
+We will practice using one pancreas sample with paired single cell GEX and ATAC from the same set of cells in this hands-on practice. You can download FASTQ files for GEX and ATAC using the following codes.
+
+```{bash eval=F}
+
+
+```
+
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
