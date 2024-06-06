@@ -23,7 +23,7 @@
 <meta name="author" content="Danni Liu" />
 
 
-<meta name="date" content="2024-06-05" />
+<meta name="date" content="2024-06-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -182,7 +182,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.2" data-path="peak-calling-and-motif-analysis.html"><a href="peak-calling-and-motif-analysis.html#call-peaks-using-macs2"><i class="fa fa-check"></i><b>7.2</b> Call peaks using MACS2</a></li>
 <li class="chapter" data-level="7.3" data-path="peak-calling-and-motif-analysis.html"><a href="peak-calling-and-motif-analysis.html#motif-analysis"><i class="fa fa-check"></i><b>7.3</b> Motif analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="data-integration.html"><a href="data-integration.html"><i class="fa fa-check"></i><b>8</b> Data integration</a></li>
+<li class="chapter" data-level="8" data-path="data-integration.html"><a href="data-integration.html"><i class="fa fa-check"></i><b>8</b> Data integration</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="data-integration.html"><a href="data-integration.html#identifying-anchors-between-scrna-seq-and-scatac-seq-datasets"><i class="fa fa-check"></i><b>8.1</b> Identifying anchors between scRNA-seq and scATAC-seq datasets</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -239,7 +242,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-8"><a href="seuratqc.html#cb2-8" tabindex="-1"></a><span class="fu">library</span>(hdf5r)</span>
 <span id="cb2-9"><a href="seuratqc.html#cb2-9" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb2-10"><a href="seuratqc.html#cb2-10" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb2-11"><a href="seuratqc.html#cb2-11" tabindex="-1"></a><span class="fu">library</span>(clustree)</span></code></pre></div>
+<span id="cb2-11"><a href="seuratqc.html#cb2-11" tabindex="-1"></a><span class="fu">library</span>(clustree)</span>
+<span id="cb2-12"><a href="seuratqc.html#cb2-12" tabindex="-1"></a><span class="fu">library</span>(TFBSTools)</span>
+<span id="cb2-13"><a href="seuratqc.html#cb2-13" tabindex="-1"></a><span class="fu">library</span>(JASPAR2020)</span>
+<span id="cb2-14"><a href="seuratqc.html#cb2-14" tabindex="-1"></a><span class="fu">library</span>(BiocParallel)</span>
+<span id="cb2-15"><a href="seuratqc.html#cb2-15" tabindex="-1"></a><span class="fu">library</span>(motifmatchr)</span></code></pre></div>
 <p>Also set working directory to the folder where you saved your downloaded datasets.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="seuratqc.html#cb3-1" tabindex="-1"></a><span class="co"># check current working directory</span></span>
 <span id="cb3-2"><a href="seuratqc.html#cb3-2" tabindex="-1"></a><span class="fu">getwd</span>()</span>

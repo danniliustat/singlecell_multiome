@@ -81,3 +81,4 @@ peak-calling-and-motif-analysis
 linkage-plot
 call-peaks-using-macs2
 motif-analysis
+identifying-anchors-between-scrna-seq-and-scatac-seq-datasets
