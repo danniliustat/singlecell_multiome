@@ -172,6 +172,16 @@ p1 + p2 + p3 & NoLegend() & theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
+visualize weights in each modality
+```{r}
+VlnPlot(pbmc, features = "RNA.weight", group.by = 'celltype.l2', sort = TRUE, pt.size = 0.1) +
+  NoLegend()
+
+```
+
+
+
+
 ```{r eval=F}
 saveRDS(pbmc,file="pbmc_clust.rds")
 ```

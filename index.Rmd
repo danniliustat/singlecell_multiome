@@ -78,10 +78,32 @@ If you want to run future analysis using your own laptop, please make sure you h
 
 ## Construct folder structure
 
+Some basic bash/shell commands
+```{bash eval=F}
+# check where you are at
+pwd
+# create directory
+mkdir new_folder
+# list all files in directory
+ls
+ls new_folder
+# copy file
+cp file newfolder/file
+#remove file--can't recover once removed
+rm file
+# count number of lines
+wc -l file
+# count number of columns
+head -1 file | awk '{print NF}'
+
+```
+
+
 ```{r eval=FALSE}
-pwd # check the current directory
-mkdir -p {~/cellranger_arc,~/pbmc_data} # create new folders
-ls # list all files
+cd /dfs6/pub/your_username
+pwd # check the current directory path
+mkdir -p {cellranger_arc,data} # create new folders
+ls # list all files in current directory
 
 ```
 

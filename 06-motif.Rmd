@@ -2,7 +2,7 @@
 
 ```{r eval=TRUE,echo =F,results=FALSE,warning=FALSE,message=FALSE}
 library(Seurat)
-library(SeuratData)
+#library(SeuratData)
 library(Signac)
 library(SeuratDisk)
 library(BSgenome.Hsapiens.UCSC.hg38) 

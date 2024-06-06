@@ -1,23 +1,78 @@
 # Data integration
+
+```{r eval=TRUE,echo =F,results=FALSE,warning=FALSE,message=FALSE}
+library(Seurat)
+#library(SeuratData)
+library(Signac)
+library(SeuratDisk)
+library(BSgenome.Hsapiens.UCSC.hg38) 
+library(EnsDb.Hsapiens.v86)
+library(ggplot2)
+library(cowplot)
+library(hdf5r)
+library(dplyr)
+library(patchwork)
+library(clustree)
+```
+
 The PBMC multiome data was built in the `SeuratData` package and was stored in a SeuratObject already, so we can download the data and directly start analyzing. This data only needs to be loaded once, and R will skip this step the next time you load it.
 
 ```{r eval=T, echo=F}
-pbmc<-readRDS("../pbmc_data/pbmc_anno_new.rds")
+pbmc<-readRDS("../pbmc_data/pbmc_anno_new_windows.rds")
 ```
 
 ```{r eval=FALSE}
-# load both modalities
+# reconstruct both modalities
+pbmc.rna<- CreateSeuratObject(
+  counts = pbmc[["RNA"]]$counts,min.cells=1,
+  assay = "RNA", meta.data = pbmc@meta.data, project = "pbmc"
+)
+
+annotation <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
+seqlevelsStyle(annotation) <- "UCSC"
+genome(annotation) <- "hg38"
+# reconstruct ATAC
+fragpath <- "../pbmc_data/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz"
+pbmc.atac <- CreateChromatinAssay(
+  counts = pbmc[["ATAC"]]$counts,
+  sep = c(":", "-"),
+  fragments = fragpath,
+  annotation = annotation
+)
+
+
+
 pbmc.rna <-pbmc[["RNA"]]
 pbmc.atac <- pbmc[["ATAC"]]
 
+# Perform standard analysis of each modality independently RNA analysis
+pbmc.rna <- NormalizeData(pbmc.rna)
+pbmc.rna <- FindVariableFeatures(pbmc.rna)
+pbmc.rna <- ScaleData(pbmc.rna)
+pbmc.rna <- RunPCA(pbmc.rna)
+pbmc.rna <- RunUMAP(pbmc.rna, dims = 1:30)
+
+# ATAC analysis add gene annotation information
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
+seqlevelsStyle(annotations) <- "UCSC"
+genome(annotations) <- "hg38"
+Annotation(pbmc.atac) <- annotations
+
+# We exclude the first dimension as this is typically correlated with sequencing depth
+pbmc.atac <- RunTFIDF(pbmc.atac)
+pbmc.atac <- FindTopFeatures(pbmc.atac, min.cutoff = "q0")
+pbmc.atac <- RunSVD(pbmc.atac)
+pbmc.atac <- RunUMAP(pbmc.atac, reduction = "lsi", dims = 2:30, reduction.name = "umap.atac", reduction.key = "atacUMAP_")
+
 ```
 
-Identifying anchors between scRNA-seq and scATAC-seq datasets
+## Identifying anchors between scRNA-seq and scATAC-seq datasets
+
 In order to identify ‘anchors’ between scRNA-seq and scATAC-seq experiments, we first generate a rough estimate of the transcriptional activity of each gene by quantifying ATAC-seq counts in the 2 kb-upstream region and gene body, using the GeneActivity() function in the Signac package. The ensuing gene activity scores from the scATAC-seq data are then used as input for canonical correlation analysis, along with the gene expression quantifications from scRNA-seq. We perform this quantification for all genes identified as being highly variable from the scRNA-seq dataset.
 
 ```{r}
 # quantify gene activity
-gene.activities <- GeneActivity(pbmc.atac, features = VariableFeatures(pbmc.rna))
+gene.activities <- GeneActivity(pbmc,assay="ATAC",features = VariableFeatures(pbmc.rna))
 
 # add gene activities as a new assay
 pbmc.atac[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)

@@ -145,15 +145,15 @@ The three columns are:
 
 
 
-An example code
+An example code:
 ```{bash eval=F}
 $ cd /dfs6/pub/your_username
 $ cellranger-arc count --id=Pancreas1 \
-                       --reference=/home/jovyan/commondata/cellranger-arc/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 \
+                       --reference=/home/jovyan/commondata/cellranger-arc/refdata-cellranger-arc-mm10-2020-A-2.0.0 \
                        --libraries=/dfs6/pub/dannil15/cellranger-arc/library.csv \
                        --localcores=8 \
                        --localmem=48
-
+# takes about 6 hours for running one sample
 ```
 
 The output folder structure looks like this:
