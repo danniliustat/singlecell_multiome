@@ -1,3 +1,100 @@
+--- 
+title: "Hands-on Analysis on Single Cell Multiome"
+author: "Danni Liu"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+---
+
+# Prerequisites
+
+Placeholder
+
+
+## About Data
+## Server environment requirements
+## R libraries
+## Construct folder structure
+## Accessing pancreas data
+
+<!--chapter:end:index.Rmd-->
+
+
+# Cell Ranger ARC for preprocessing sequencing data {#cellranger_arc}
+
+Placeholder
+
+
+## `cellranger-arc mkfastq`
+## BCL naming convention
+## `cellranger-arc count`
+
+<!--chapter:end:01-CellRangerARC.Rmd-->
+
+
+# Obtain data and perform QC using Seurat{#seuratqc}
+
+Placeholder
+
+
+## Download data
+## Load data in R and construct Seurat object
+## Perform quality control using both assays
+
+<!--chapter:end:02-SeuratQC.Rmd-->
+
+
+# Normalization and cell cycle correction
+
+Placeholder
+
+
+## Normalization
+## Cell cycle correction and scale data
+
+<!--chapter:end:03-norm_cc.Rmd-->
+
+
+# Dimension reduction and clustering
+
+Placeholder
+
+
+## Identify top variable features
+## Dimension reduction
+## Clustering and joint clustering
+
+<!--chapter:end:04-cluster.Rmd-->
+
+
+# Differential Expression (DE) analysis and cell type annotation
+
+Placeholder
+
+
+## DE analysis
+## Cell type annotation
+
+<!--chapter:end:05-DEanalysis.Rmd-->
+
+
+# Peak calling and Motif analysis
+
+Placeholder
+
+
+## Linkage plot
+## Call peaks using MACS2
+## Motif analysis
+
+<!--chapter:end:06-motif.Rmd-->
+
 # Data integration
 
 ```{r eval=TRUE,echo =F,results=FALSE,warning=FALSE,message=FALSE}
@@ -131,4 +228,14 @@ p1 + p2
 ```{r eval=F}
 saveRDS(pbmc.atac,file="pbmc_atac_integrated.rds")
 ```
+
+
+<!--chapter:end:07-integration.Rmd-->
+
+`r if (knitr:::is_html_output()) '
+# References {-}
+
+'`
+
+<!--chapter:end:08-references.Rmd-->
 
