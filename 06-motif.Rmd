@@ -126,7 +126,7 @@ pbmc <- AddMotifs(
 
 To identify potentially important cell-type-specific regulatory sequences, we can search for DNA motifs that are overrepresented in a set of peaks that are differentially accessible between cell types.
 
-Here, we find differentially accessible peaks between Pvalb and Sst inhibitory interneurons. For sparse data (such as scATAC-seq), we find it is often necessary to lower the min.pct threshold in FindMarkers() from the default (0.1, which was designed for scRNA-seq data).
+Here, we find differentially accessible peaks between CD8 TEM and B Memory cells. For sparse data (such as scATAC-seq), we find it is often necessary to lower the min.pct threshold in FindMarkers() from the default (0.1, which was designed for scRNA-seq data).
 
 We then perform a hypergeometric test to test the probability of observing the motif at the given frequency by chance, comparing with a background set of peaks matched for GC content.
 

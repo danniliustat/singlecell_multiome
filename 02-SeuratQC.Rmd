@@ -129,7 +129,7 @@ saveRDS(pbmc,file="pbmc.rds")
 pbmc<-readRDS("../pbmc_data/pbmc.rds")
 ```
 
-Using `DefaultAssay()` to specify the assay you want to work on.
+Using `DefaultAssay()` to specify the assay you want to work on. `PercentageFeatureSet` calculates the proportion of transcripts mapping to mitochondrial genes. Large amount of mitochondrial contamination is an indicator of dead or dying cells. Voilin plots help to visualize the distribution of each parameter.
 
 ```{r eval=FALSE,warning=FALSE,message=FALSE}
 # calculate percentage of mitochondrial genes in each cell
@@ -157,11 +157,24 @@ VlnPlot(pbmc, features = c("nCount_ATAC", "TSS.enrichment", "nucleosome_signal")
   log = TRUE, pt.size = 0) + NoLegend()
 ```
 
+```{r eval=T,fig.cap='Voilin plot for QC', out.width='100%', fig.asp=.75, fig.align='center'}
+# Scatter plot for nCount_RNA, percent.mito, nFeature_RNA and filtering based on these variables
+# FeatureScatter is typically used to visualize feature-feature relationships, but can be used
+# for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
 
+plot1 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt")
+plot2 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+library(patchwork)
+plot1 + plot2 +plot_layout(ncol=2)
+
+```
+
+
+Perform QC on cells based on the parameters, you can change the paramters in the filtering criteria and see how this can change the number fo cells in the filtered object. **Note that you need to save the filtered object into a name different from the original raw data to avoid overwriting.**
 
 ```{r eval=FALSE,warning=FALSE,message=FALSE}
 # play with different filtering cutoffs to see how number of cells change
-pbmc <- subset(
+pbmc_qc <- subset(
   x = pbmc,
   subset = nCount_ATAC < 7e4 &
     nCount_ATAC > 5e3 &
@@ -172,13 +185,13 @@ pbmc <- subset(
     TSS.enrichment > 1
 )
 
-pbmc
+pbmc_qc
 
 ```
 
 Saving data periodically to preserve Seurat results. Output data can be large.
 
 ```{r eval=F}
-saveRDS(pbmc,file="pbmc_qc.rds")
+saveRDS(pbmc_qc,file="pbmc_qc.rds")
 ```
 *******

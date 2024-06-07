@@ -22,6 +22,8 @@ pbmc<-readRDS("../pbmc_data/pbmc_norm.rds")
 
 ## Identify top variable features
 
+Identify genes that have largest stablized variation. By default only the top 2000 most variable genes will be picked out, and used for later dimension reduction and clustering.
+
 ```{r eval=T,results=F,warning=FALSE,message=FALSE}
 # Finding highly variable genes (feature selection), we return 2000 features per dataset by default
 pbmc <- FindVariableFeatures(object = pbmc, selection.method ="vst", 
@@ -30,6 +32,7 @@ length(VariableFeatures(pbmc))
 # [1] 2000 # return top 2000 variable features by default
 ```
 
+Visualizing top variable genes.
 ```{r eval=T,echo=T, warning=FALSE,message=FALSE, fig.cap='Label the top 10 variable features', out.width='100%', fig.asp=.75, fig.align='center'}
 library(patchwork)
 # Identify the 10 most highly variable genes
@@ -44,7 +47,7 @@ plot1 + plot2 + plot_layout(ncol=1)
 ```
 
 ## Dimension reduction
-Run separately for RNA and ATAC. `min.dist` and `spread` controls how tightly the points are clustered.
+Run separately for RNA and ATAC. Use elbow plot and other figures to determine how many PCs to be included for further analysis. 
 
 ```{r eval=T,warning=FALSE,message=FALSE,fig.cap='PC plot by cell cycle', out.width='100%', fig.asp=.75, fig.align='center'}
 # RNA analysis
@@ -56,8 +59,7 @@ DimPlot(object = pbmc)
 DimPlot(pbmc,reduction = "pca",group.by= "Phase",split.by = "Phase")
 ```
 
-Other visualization figures for determining dimensionality:
-
+Figures for determining dimensionality:
 ```{r eval=T, fig.cap='Variations in top genes for the first two PCs', out.width='100%', fig.asp=.75, fig.align='center'}
 # visualize the top genes associated with reduction components for the first 2 PCs
 VizDimLoadings(object = pbmc, dims = 1:2)
@@ -89,7 +91,7 @@ pbmc <- RunUMAP(pbmc, reduction = 'lsi', dims = 2:50, reduction.name = "umap.ata
 pbmc<-readRDS("../pbmc_data/pbmc_anno.rds")
 ```
 
-Clustering based on RNA assay. Play around with different resolutions.
+We can perform clustering only based on RNA assay. Play around with different resolutions. `min.dist` and `spread` controls how tightly the points are clustered.
 ```{r eval=F,warning=FALSE,message=FALSE}
 DefaultAssay(pbmc) <- "RNA"
 pbmc <- FindNeighbors(pbmc, dims = 1:50,force.recalc = T)
@@ -138,6 +140,7 @@ p1 + p2 + p3 & NoLegend() & theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
+Perform clustering using both RNA and ATAC assays.
 ```{r eval=F,warning=FALSE,message=FALSE}
 # We exclude the first dimension for ATAC as this is typically correlated with sequencing depth
 pbmc <- FindMultiModalNeighbors(pbmc, reduction.list = list("pca", "lsi"), dims.list = list(1:50, 2:50))
@@ -152,7 +155,7 @@ You can further generate sub-clusters within large cluster to explore underlying
 # Idents(pbmc) <- "sub.cluster"
 ```
 
-Compare: resolution=0.7 for RNA and resolution=0.6 for joint assays have similar number of clusters.
+Compare: resolution=0.7 for RNA and resolution=0.6 for joint assays, they have similar number of clusters.
 
 ```{r eval=T,fig.cap='Clusters based on RNA assay vs joint assays', out.width='150%', fig.asp=.5, fig.align='center'}
 p1 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.0.7", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters")
@@ -161,7 +164,7 @@ p1 + p2 & NoLegend() & theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
-compare: same cluster distribution on different assay space.
+Compare: same cluster distribution on different assay space.
 
 ```{r eval=T,fig.cap='Clusters for single assay UMAP space vs joint assay space', out.width='250%', fig.asp=.4, fig.align='center'}
 p1 <- DimPlot(pbmc, reduction = "umap.rna", group.by = "seurat_clusters", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA")
@@ -172,14 +175,15 @@ p1 + p2 + p3 & NoLegend() & theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
-visualize weights in each modality
+Visualize WNN weights assigned to cell types in each modality.
 ```{r}
-VlnPlot(pbmc, features = "RNA.weight", group.by = 'celltype.l2', sort = TRUE, pt.size = 0.1) +
+VlnPlot(pbmc, features = "RNA.weight", group.by = 'predicted.celltype.l2', sort = TRUE, pt.size = 0.1) +
+  NoLegend()
+VlnPlot(pbmc, features = "ATAC.weight", group.by = 'predicted.celltype.l2', sort = TRUE, pt.size = 0.1) +
   NoLegend()
 
+
 ```
-
-
 
 
 ```{r eval=F}

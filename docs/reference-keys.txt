@@ -85,3 +85,5 @@ identifying-anchors-between-scrna-seq-and-scatac-seq-datasets
 accessing-pancreas-data
 annotate-scatac-seq-cells-via-label-transfer
 construct-folder-structure-in-terminal
+fig:unnamed-chunk-5-1
+fig:unnamed-chunk-5-2

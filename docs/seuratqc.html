@@ -145,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#about-data"><i class="fa fa-check"></i><b>1.1</b> About Data</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#server-environment-requirements"><i class="fa fa-check"></i><b>1.2</b> Server environment requirements</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#r-libraries"><i class="fa fa-check"></i><b>1.3</b> R libraries</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#construct-folder-structure"><i class="fa fa-check"></i><b>1.4</b> Construct folder structure</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#construct-folder-structure-in-terminal"><i class="fa fa-check"></i><b>1.4</b> Construct folder structure in Terminal</a></li>
 <li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#accessing-pancreas-data"><i class="fa fa-check"></i><b>1.5</b> Accessing pancreas data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="cellranger_arc.html"><a href="cellranger_arc.html"><i class="fa fa-check"></i><b>2</b> Cell Ranger ARC for preprocessing sequencing data</a>
@@ -310,7 +310,7 @@ Explore Seurat Objects using <code>@</code> or <code>$</code></p>
 </div>
 <div id="perform-quality-control-using-both-assays" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Perform quality control using both assays<a href="seuratqc.html#perform-quality-control-using-both-assays" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Using <code>DefaultAssay()</code> to specify the assay you want to work on.</p>
+<p>Using <code>DefaultAssay()</code> to specify the assay you want to work on. <code>PercentageFeatureSet</code> calculates the proportion of transcripts mapping to mitochondrial genes. Large amount of mitochondrial contamination is an indicator of dead or dying cells. Voilin plots help to visualize the distribution of each parameter.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="seuratqc.html#cb7-1" tabindex="-1"></a><span class="co"># calculate percentage of mitochondrial genes in each cell</span></span>
 <span id="cb7-2"><a href="seuratqc.html#cb7-2" tabindex="-1"></a><span class="fu">DefaultAssay</span>(pbmc) <span class="ot">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
 <span id="cb7-3"><a href="seuratqc.html#cb7-3" tabindex="-1"></a>pbmc[[<span class="st">&quot;percent.mt&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">PercentageFeatureSet</span>(pbmc, <span class="at">pattern =</span> <span class="st">&quot;^MT-&quot;</span>)</span>
@@ -343,21 +343,36 @@ Figure 3.1: Voilin plot for QC
 Figure 3.2: Voilin plot for QC
 </p>
 </div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="seuratqc.html#cb10-1" tabindex="-1"></a><span class="co"># play with different filtering cutoffs to see how number of cells change</span></span>
-<span id="cb10-2"><a href="seuratqc.html#cb10-2" tabindex="-1"></a>pbmc <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
-<span id="cb10-3"><a href="seuratqc.html#cb10-3" tabindex="-1"></a>  <span class="at">x =</span> pbmc,</span>
-<span id="cb10-4"><a href="seuratqc.html#cb10-4" tabindex="-1"></a>  <span class="at">subset =</span> nCount_ATAC <span class="sc">&lt;</span> <span class="fl">7e4</span> <span class="sc">&amp;</span></span>
-<span id="cb10-5"><a href="seuratqc.html#cb10-5" tabindex="-1"></a>    nCount_ATAC <span class="sc">&gt;</span> <span class="fl">5e3</span> <span class="sc">&amp;</span></span>
-<span id="cb10-6"><a href="seuratqc.html#cb10-6" tabindex="-1"></a>    nCount_RNA <span class="sc">&lt;</span> <span class="dv">25000</span> <span class="sc">&amp;</span></span>
-<span id="cb10-7"><a href="seuratqc.html#cb10-7" tabindex="-1"></a>    nCount_RNA <span class="sc">&gt;</span> <span class="dv">1000</span> <span class="sc">&amp;</span></span>
-<span id="cb10-8"><a href="seuratqc.html#cb10-8" tabindex="-1"></a>    percent.mt <span class="sc">&lt;</span> <span class="dv">25</span> <span class="sc">&amp;</span></span>
-<span id="cb10-9"><a href="seuratqc.html#cb10-9" tabindex="-1"></a>    nucleosome_signal <span class="sc">&lt;</span> <span class="dv">2</span> <span class="sc">&amp;</span></span>
-<span id="cb10-10"><a href="seuratqc.html#cb10-10" tabindex="-1"></a>    TSS.enrichment <span class="sc">&gt;</span> <span class="dv">1</span></span>
-<span id="cb10-11"><a href="seuratqc.html#cb10-11" tabindex="-1"></a>)</span>
-<span id="cb10-12"><a href="seuratqc.html#cb10-12" tabindex="-1"></a></span>
-<span id="cb10-13"><a href="seuratqc.html#cb10-13" tabindex="-1"></a>pbmc</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="seuratqc.html#cb10-1" tabindex="-1"></a><span class="co"># Scatter plot for nCount_RNA, percent.mito, nFeature_RNA and filtering based on these variables</span></span>
+<span id="cb10-2"><a href="seuratqc.html#cb10-2" tabindex="-1"></a><span class="co"># FeatureScatter is typically used to visualize feature-feature relationships, but can be used</span></span>
+<span id="cb10-3"><a href="seuratqc.html#cb10-3" tabindex="-1"></a><span class="co"># for anything calculated by the object, i.e. columns in object metadata, PC scores etc.</span></span>
+<span id="cb10-4"><a href="seuratqc.html#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="seuratqc.html#cb10-5" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(pbmc, <span class="at">feature1 =</span> <span class="st">&quot;nCount_RNA&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;percent.mt&quot;</span>)</span>
+<span id="cb10-6"><a href="seuratqc.html#cb10-6" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(pbmc, <span class="at">feature1 =</span> <span class="st">&quot;nCount_RNA&quot;</span>, <span class="at">feature2 =</span> <span class="st">&quot;nFeature_RNA&quot;</span>)</span>
+<span id="cb10-7"><a href="seuratqc.html#cb10-7" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb10-8"><a href="seuratqc.html#cb10-8" tabindex="-1"></a>plot1 <span class="sc">+</span> plot2 <span class="sc">+</span><span class="fu">plot_layout</span>(<span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-11"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-11-1.png" alt="Voilin plot for QC" width="100%" />
+<p class="caption">
+Figure 3.3: Voilin plot for QC
+</p>
+</div>
+<p>Perform QC on cells based on the parameters, you can change the paramters in the filtering criteria and see how this can change the number fo cells in the filtered object. <strong>Note that you need to save the filtered object into a name different from the original raw data to avoid overwriting.</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="seuratqc.html#cb11-1" tabindex="-1"></a><span class="co"># play with different filtering cutoffs to see how number of cells change</span></span>
+<span id="cb11-2"><a href="seuratqc.html#cb11-2" tabindex="-1"></a>pbmc_qc <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
+<span id="cb11-3"><a href="seuratqc.html#cb11-3" tabindex="-1"></a>  <span class="at">x =</span> pbmc,</span>
+<span id="cb11-4"><a href="seuratqc.html#cb11-4" tabindex="-1"></a>  <span class="at">subset =</span> nCount_ATAC <span class="sc">&lt;</span> <span class="fl">7e4</span> <span class="sc">&amp;</span></span>
+<span id="cb11-5"><a href="seuratqc.html#cb11-5" tabindex="-1"></a>    nCount_ATAC <span class="sc">&gt;</span> <span class="fl">5e3</span> <span class="sc">&amp;</span></span>
+<span id="cb11-6"><a href="seuratqc.html#cb11-6" tabindex="-1"></a>    nCount_RNA <span class="sc">&lt;</span> <span class="dv">25000</span> <span class="sc">&amp;</span></span>
+<span id="cb11-7"><a href="seuratqc.html#cb11-7" tabindex="-1"></a>    nCount_RNA <span class="sc">&gt;</span> <span class="dv">1000</span> <span class="sc">&amp;</span></span>
+<span id="cb11-8"><a href="seuratqc.html#cb11-8" tabindex="-1"></a>    percent.mt <span class="sc">&lt;</span> <span class="dv">25</span> <span class="sc">&amp;</span></span>
+<span id="cb11-9"><a href="seuratqc.html#cb11-9" tabindex="-1"></a>    nucleosome_signal <span class="sc">&lt;</span> <span class="dv">2</span> <span class="sc">&amp;</span></span>
+<span id="cb11-10"><a href="seuratqc.html#cb11-10" tabindex="-1"></a>    TSS.enrichment <span class="sc">&gt;</span> <span class="dv">1</span></span>
+<span id="cb11-11"><a href="seuratqc.html#cb11-11" tabindex="-1"></a>)</span>
+<span id="cb11-12"><a href="seuratqc.html#cb11-12" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="seuratqc.html#cb11-13" tabindex="-1"></a>pbmc_qc</span></code></pre></div>
 <p>Saving data periodically to preserve Seurat results. Output data can be large.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="seuratqc.html#cb11-1" tabindex="-1"></a><span class="fu">saveRDS</span>(pbmc,<span class="at">file=</span><span class="st">&quot;pbmc_qc.rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="seuratqc.html#cb12-1" tabindex="-1"></a><span class="fu">saveRDS</span>(pbmc_qc,<span class="at">file=</span><span class="st">&quot;pbmc_qc.rds&quot;</span>)</span></code></pre></div>
 <hr />
 
 </div>

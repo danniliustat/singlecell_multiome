@@ -22,7 +22,7 @@ pbmc<-readRDS("pbmc_qc.rds")
 
 ## Normalization
 
-Need to be performed on "RNA" and "ATAC" assays separately.
+Need to be performed normalization on "RNA" and "ATAC" assays separately.
 ```{r eval=F}
 # RNA analysis
 DefaultAssay(pbmc) <- "RNA"
@@ -35,7 +35,7 @@ pbmc <- RunTFIDF(pbmc)
 ```
 
 ## Cell cycle correction and scale data
-Need to normalize data first before calculating cell cycle score
+Need to normalize data first before calculating cell cycle score. Assign cell cycles based on cell cycle score.
 ```{r eval=F,warning=FALSE,message=FALSE}
 DefaultAssay(pbmc) <- "RNA"
 pbmc<-NormalizeData(pbmc)
@@ -46,6 +46,8 @@ pbmc  <- CellCycleScoring(pbmc, s.features = s.genes, g2m.features = g2m.genes, 
 unique(pbmc@meta.data$Phase)
 # [1] "G2M" "S"   "G1" 
 ```
+
+Scale data and regress out unwanted variations. You might want to skip the step that regress out variables because it requires huge CPU memory and long time.
 
 ```{r eval=F}
 ## regress out unwanted variations
