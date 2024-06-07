@@ -21,7 +21,7 @@ The PBMC multiome data was built in the `SeuratData` package and was stored in a
 InstallData("pbmcMultiome")
 ```
 
-```{r eval=FALSE,warning=FALSE,message=FALSE}
+```{r eval=T,warning=FALSE,message=FALSE}
 # load both modalities
 pbmc.rna <- LoadData("pbmcMultiome", "pbmc.rna")
 pbmc.atac <- LoadData("pbmcMultiome", "pbmc.atac")
@@ -53,8 +53,8 @@ pbmc.atac <- RunUMAP(pbmc.atac, reduction = "lsi", dims = 2:30, reduction.name =
 ```
 
 ```{r eval=T, warning=FALSE,message=FALSE}
-p1 <- DimPlot(pbmc.rna, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("RNA")
-p2 <- DimPlot(pbmc.atac, group.by = "orig.ident", label = FALSE) + NoLegend() + ggtitle("ATAC")
+p1 <- DimPlot(pbmc.rna, group.by = "seurat_annotations", reduction = "umap",label = TRUE) + NoLegend() + ggtitle("RNA")
+p2 <- DimPlot(pbmc.atac, group.by = "orig.ident", reduction="umap", label = FALSE) + NoLegend() + ggtitle("ATAC")
 p1 + p2
 
 ```

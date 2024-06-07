@@ -1,7 +1,8 @@
 # Obtain data and perform QC using Seurat{#seuratqc}
 
-
 ## Download data
+
+To replicate results in this tutorial, you need to download the PBMC data from 10X website.
 
 The PBMC multiome dataset is available from [10x genomics](https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k). The website contains output files from CelL Ranger ARC. Please go to the above website and make sure you download the following files to your data folder:
 
@@ -11,7 +12,8 @@ The PBMC multiome dataset is available from [10x genomics](https://support.10xge
 
 In Terminal window:
 ```{bash eval=FALSE}
-cd ~/pbmc_data
+mkdir pbmc_data
+cd pbmc_data
 # download data
 wget https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5
 wget https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz
@@ -52,7 +54,7 @@ Also set working directory to the folder where you saved your downloaded dataset
 getwd()
 
 # set working directory
-setwd("/dfs6/pub/your_user_name")
+setwd("/dfs6/pub/your_user_name/pbmc_data")
 getwd() # check again
 ```
 

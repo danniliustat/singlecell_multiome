@@ -20,9 +20,13 @@ The data used in this hands-on tutorial is a public single cell 'multiome' datas
 
 In this hands-on tutorial, we present a complete workflow for analyzing multiome data starting from sequencing data, with an additional section for data integration of multiomics datasets that are collected from different experiments. We will demonstrate how to preprocess raw sequencing data using Cell Ranger ARC, perform data quality control, cluster and annotate cell types, and identify marker genes using differential expression (DE) analysis. Then we will treat the two profiles of scRNA-seq and scATAC-seq as originating from two separate experiments, and perform data integration. Since they were originally measured in the same cells, this provides a ground truth that we can use to assess the accuracy of integration.
 
+::: {#note style="color: red;"}
+The PBMC dataset is used here for illustration purpose. For hands-on practice, please try to apply the pipeline in this tutorial on the mice pancreatic data. This is a process that highly assembles the real-world data analysis experience, that we apply an existing pipeline from a publication to a new target dataset and make modifications to fit for our purpose. 
+:::
+
 
 ## Server environment requirements
-We will use the UCI HPC3 environment for analysis. Please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a server under **the second option** with "R4.3.3" and "Spatial Transcriptomics" available in the environment. Please request **4 CPU cores**, with **6Gb of memory** for each core.
+We will use the UCI HPC3 environment for analysis. Please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a server under **the second option** with "R4.3.3" and "Spatial Transcriptomics" available in the environment. Please request **4-8 CPU cores**, with **6Gb of memory** for each core.
 
 ```{r echo=FALSE, fig.align = 'center', out.width = "100%", fig.cap = "JupyterHub server setting", }
 knitr::include_graphics("images/hpc3.png")
@@ -98,22 +102,22 @@ head -1 file | awk '{print NF}'
 
 ```
 
+Navigate to the working directory, with 1TB of storage. 
 
 ```{r eval=FALSE}
 cd /dfs6/pub/your_username
 pwd # check the current directory path
-mkdir -p {cellranger_arc,data} # create new folders
 ls # list all files in current directory
 
 ```
 
-## Downloading FASTQ files
+## Accessing pancreas data
 
-We will practice using one pancreas sample with paired single cell GEX and ATAC from the same set of cells in this hands-on practice. You can download FASTQ files for GEX and ATAC using the following codes.
+The sequencing data was processed using `cellranger-arc` so you will directly load the output file into R. The data was saved in `/commondata/workshop/...`. You can copy the data to your working directory. 
 
 ```{bash eval=F}
-
-
+scp -r .../Pancreas1 /dfs6/pub/your_username/.
+ls Pancreas1/outs/
 ```
 
 

@@ -16,13 +16,14 @@ knitr::include_graphics("images/gex-atac.png")
 The FASTQ files are usually prepared by our sequencing core, so we can take the FASTQ files as input and call `callranger-arc count` to generate count matrices directly. 
 
 ::: {#note style="color: red;"}
-`cellranger-arc` is already installed in HPC3 environment so we can call it directly using `module load`. You can check available software in HPC3 using `module avail`.
+Note: We won't run `cellranger-arc` in this hands-on session, so the sections below just show some example codes for running the  pipeline. You can check the Cell Ranger website for detailed instructions for preparing input files for each step.
+:::
+
+::: {#note style="color: red;"}
+`cellranger-arc` is already installed in HPC3 environment under specific containers, so we can call it directly using `module load`. You can check available software in HPC3 using `module avail`.
 :::
 
 ## `cellranger-arc mkfastq`
-::: {#note style="color: red;"}
-Note: We won't run `cellranger-arc mkfastq` in this hands-on session, so this section below just shows an example for running the `mkfastq` pipeline. You can check the Cell Ranger website for detailed instructions for preparing input files for `mkfastq` run.
-:::
 
 The Cell Ranger ARC pipeline starts with Illumina sequencer's base call files (BCLs), and converts them into FASTQ files using `cellranger-arc mkfastq`. The `cellranger-arc mkfastq` is a pipeline that wraps Illumina's _bcl2fastq_, while also supports demultiplexing of ATAC or Gene Expression (GEX) flow cells. For the demultiplexing purpose, the `cellranger-arc mkfastq` should be run for each flow cell separately, independent of the number of sequencing runs of each library. Below are two examples. 
 
@@ -97,7 +98,7 @@ drwxrwxr-x 2 jdoe jdoe      193 Sep  7 22:48 Stats
 -rw-rw-r-- 1 jdoe jdoe 12635207 Sep  7 22:48 Undetermined_S0_L001_R3_001.fastq.gz
 
 $ tree test-bcl-atac/outs/fastq_path/test-bcl-atac/
-tiny-bcl-atac/outs/fastq_path/p1
+test-bcl-atac/outs/fastq_path/p1
 └── s1
     ├── test_sample_miseq_S1_L001_I1_001.fastq.gz
     ├── test_sample_miseq_S1_L001_R1_001.fastq.gz
@@ -109,7 +110,7 @@ tiny-bcl-atac/outs/fastq_path/p1
 ***
 
 ## BCL naming convention
-If you obtain the FASTQ files from other sources, it is important to ensure the FASTQ files are named in concordance with the BCL naming convention before running `cellranger-arc`. (Please refer to the [cellranger-arc input FASTQ files] (https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/specifying-input-fastq-count) and [bcl2fastq User Guide](https://support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/bcl2fastq/bcl2fastq2-v2-20-software-guide-15051736-03.pdf) for complete instructions.)
+If you obtain the FASTQ files from other sources, it is important to ensure that the FASTQ files are named in concordance with the BCL naming convention before running `cellranger-arc`. (Please refer to the [cellranger-arc input FASTQ files](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/specifying-input-fastq-count) and [bcl2fastq User Guide](https://support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/bcl2fastq/bcl2fastq2-v2-20-software-guide-15051736-03.pdf) for complete instructions.)
 
 
 An example of the FASTQ file looks like this: `Sample_S1_L001_R1_001.fastq.gz`. Briefly, FASTQ files taken by are named with the sample name and number, the flow cell lane, and read. The file extension is '*.fastq.gz'.
@@ -130,6 +131,9 @@ Here is the explanation for each element in the name:
 
 ## `cellranger-arc count`
 
+For paired GEX and ATAC sequnecing, we will organize the FASTQ files from the same sample on a library CSV file and pass it to `cellranger-arc count`.
+
+An example of the library CSV looks like this:
 
 ```{bash eval=F}
 fastqs,sample,library_type
@@ -141,11 +145,13 @@ The three columns are:
 
 * fastqs: A path to the directory containing the demultiplexed FASTQ files for this sample. If you have multiple sets of fastqs for this library, add an additional row, and use the use same library_type value.
 * sample: Sample name assigned as the Sample_ID in the demultiplexing sample sheet.
-* library_type: This field is case-sensitive and must exactly match "Chromatin Accessibility" for a Multiome ATAC library and "Gene Expression" for a Multiome GEX library.
+* library_type: This field is case-sensitive and must **exactly match** "Chromatin Accessibility" for a Multiome ATAC library and "Gene Expression" for a Multiome GEX library.
 
+You will also need to download a reference annotation for alignment. 10x Genomics provides references for Human and Mouse in their [Download Center](https://www.10xgenomics.com/support/software/cell-ranger/downloads#reference-downloads). But you can also build your own reference using `cellranger-arc mkref` if you have the FASTA or GTF of your reference package. Complete instructions for doing this can be found from their [manual](https://www.10xgenomics.com/support/software/cell-ranger-arc/latest/analysis/mkref)
 
+***
+Once all input files are prepared, we are ready to run `cellranger-arc count`. An example code for running one sample looks like this:
 
-An example code:
 ```{bash eval=F}
 $ cd /dfs6/pub/your_username
 $ cellranger-arc count --id=Pancreas1 \
@@ -191,10 +197,10 @@ Saving pipestance info to "sample345/sample345.mri.tgz"
 
 The outputs that are useful for next step include:
 
-* web_summary.html: Run summary metrics and charts in HTML format.
-* filtered_feature_bc_matrix.h5: Filtered feature barcode matrix stored in hdf5 format. The rows consist of all the gene and peak features concatenated together (identical to raw feature barcode matrix) and the columns are restricted to those barcodes that are identified as cells.
-* filtered_feature_bc_matrix: Filtered feature barcode matrix stored in MEX format. The rows consist of all the gene and peak features concatenated together (identical to raw feature barcode matrix) and the columns are restricted to those barcodes that are identified as cells.
-* atac_fragments.tsv.gz: Count and barcode information for every ATAC fragment observed in the experiment in TSV format.
-* atac_fragments.tsv.gz.tbi: Index for atac_fragments.tsv.gz.
+* **web_summary.html**: Run summary metrics and charts in HTML format.
+* **filtered_feature_bc_matrix.h5**: Filtered feature barcode matrix stored in hdf5 format. The rows consist of all the gene and peak features concatenated together (identical to raw feature barcode matrix) and the columns are restricted to those barcodes that are identified as cells.
+* **filtered_feature_bc_matrix**: Filtered feature barcode matrix stored in MEX format. The rows consist of all the gene and peak features concatenated together (identical to raw feature barcode matrix) and the columns are restricted to those barcodes that are identified as cells.
+* **atac_fragments.tsv.gz**: Count and barcode information for every ATAC fragment observed in the experiment in TSV format.
+* **atac_fragments.tsv.gz.tbi**: Index for atac_fragments.tsv.gz.
 
 
