@@ -23,7 +23,7 @@
 <meta name="author" content="Danni Liu" />
 
 
-<meta name="date" content="2024-06-06" />
+<meta name="date" content="2024-06-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -211,7 +211,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Hands-on Analysis on Single Cell Multiome</h1>
 <p class="author"><em>Danni Liu</em></p>
-<p class="date"><em>2024-06-06</em></p>
+<p class="date"><em>2024-06-07</em></p>
 </div>
 <div id="prerequisites" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Prerequisites<a href="index.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -302,9 +302,10 @@ Figure 1.1: JupyterHub server setting
 </div>
 <div id="accessing-pancreas-data" class="section level2 hasAnchor" number="1.5">
 <h2><span class="header-section-number">1.5</span> Accessing pancreas data<a href="index.html#accessing-pancreas-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The sequencing data was processed using <code>cellranger-arc</code> so you will directly load the output file into R. The data was saved in <code>/commondata/workshop/...</code>. You can copy the data to your working directory.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="index.html#cb4-1" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> .../Pancreas1 /dfs6/pub/your_username/.</span>
-<span id="cb4-2"><a href="index.html#cb4-2" tabindex="-1"></a><span class="fu">ls</span> Pancreas1/outs/</span></code></pre></div>
+<p>The sequencing data was processed using <code>cellranger-arc</code> so you will directly load the output file into R. The data was saved in <code>/dfs8/commondata/workshop/CaSB_data</code>. You can copy the data to your working directory.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="index.html#cb4-1" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> /dfs8/commondata/workshop/CaSB_data /dfs6/pub/your_username/.</span>
+<span id="cb4-2"><a href="index.html#cb4-2" tabindex="-1"></a><span class="bu">cd</span> /dfs6/pub/your_username/CaSB_data</span>
+<span id="cb4-3"><a href="index.html#cb4-3" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
 
 </div>
 </div>

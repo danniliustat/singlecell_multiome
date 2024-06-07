@@ -113,11 +113,12 @@ ls # list all files in current directory
 
 ## Accessing pancreas data
 
-The sequencing data was processed using `cellranger-arc` so you will directly load the output file into R. The data was saved in `/commondata/workshop/...`. You can copy the data to your working directory. 
+The sequencing data was processed using `cellranger-arc` so you will directly load the output file into R. The data was saved in `/dfs8/commondata/workshop/CaSB_data`. You can copy the data to your working directory. 
 
 ```{bash eval=F}
-scp -r .../Pancreas1 /dfs6/pub/your_username/.
-ls Pancreas1/outs/
+scp -r /dfs8/commondata/workshop/CaSB_data /dfs6/pub/your_username/.
+cd /dfs6/pub/your_username/CaSB_data
+ls
 ```
 
 
