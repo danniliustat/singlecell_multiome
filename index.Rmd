@@ -26,7 +26,7 @@ The PBMC dataset is used here for illustration purpose. For hands-on practice, p
 
 
 ## Server environment requirements
-We will use the UCI HPC3 environment for analysis. Please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a container under the one with ** *CaSB Short Course ** which has "R4.3.3" and required R packages installed in the environment. Please request **4-8 CPU cores**, with **6Gb of memory** for each core.
+We will use the UCI HPC3 environment for analysis. Please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a container under the one with ** *CaSB Short Course ** which has "R4.3.3" and required R packages installed in the environment. Please request **4-8 CPU cores**, with **6Gb of memory** for each core. Also please check the last box "Enable full HPC3 software stack (overide container stack)" if you want to try running `cellranger-arc`.
 
 ```{r echo=FALSE, fig.align = 'center', out.width = "100%", fig.cap = "JupyterHub server setting", }
 knitr::include_graphics("images/hpc3.png")
