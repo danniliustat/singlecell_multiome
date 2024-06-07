@@ -133,9 +133,9 @@ clustree(df, prefix = "res_")
 Compare: resolution=0.1, resolution=0.6 and resolution=1.1.
 
 ```{r eval=T,fig.cap='Clusters based on RNA assay vs joint assays', out.width='250%', fig.asp=.4, fig.align='center'}
-p1 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.0.1", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=0.1")
-p2 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.0.7", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=0.7")
-p3 <- DimPlot(pbmc, reduction = "wnn.umap", group.by = "RNA_snn_res.1.1", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=1.1")
+p1 <- DimPlot(pbmc, reduction = "umap.rna", group.by = "RNA_snn_res.0.1", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=0.1")
+p2 <- DimPlot(pbmc, reduction = "umap.rna", group.by = "RNA_snn_res.0.7", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=0.7")
+p3 <- DimPlot(pbmc, reduction = "umap.rna", group.by = "RNA_snn_res.1.1", label = TRUE, label.size = 2.5, repel = TRUE) + ggtitle("RNA clusters res=1.1")
 p1 + p2 + p3 & NoLegend() & theme(plot.title = element_text(hjust = 0.5))
 
 ```
