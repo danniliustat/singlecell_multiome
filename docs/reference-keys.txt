@@ -84,3 +84,4 @@ motif-analysis
 identifying-anchors-between-scrna-seq-and-scatac-seq-datasets
 accessing-pancreas-data
 annotate-scatac-seq-cells-via-label-transfer
+construct-folder-structure-in-terminal

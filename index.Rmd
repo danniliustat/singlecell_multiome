@@ -21,22 +21,24 @@ The data used in this hands-on tutorial is a public single cell 'multiome' datas
 In this hands-on tutorial, we present a complete workflow for analyzing multiome data starting from sequencing data, with an additional section for data integration of multiomics datasets that are collected from different experiments. We will demonstrate how to preprocess raw sequencing data using Cell Ranger ARC, perform data quality control, cluster and annotate cell types, and identify marker genes using differential expression (DE) analysis. Then we will treat the two profiles of scRNA-seq and scATAC-seq as originating from two separate experiments, and perform data integration. Since they were originally measured in the same cells, this provides a ground truth that we can use to assess the accuracy of integration.
 
 ::: {#note style="color: red;"}
-The PBMC dataset is used here for illustration purpose. For hands-on practice, please try to apply the pipeline in this tutorial on the mice pancreatic data. This is a process that highly assembles the real-world data analysis experience, that we apply an existing pipeline from a publication to a new target dataset and make modifications to fit for our purpose. 
+The PBMC dataset is used here for illustration purpose. For hands-on practice, please try to apply the pipeline in this tutorial on the mice pancreatic data. This can be an experience that highly assembles the real-world data analysis process, where we apply an existing pipeline from a publication to a new target dataset and make modifications of the pipeline to fit for our purpose. 
 :::
 
 
 ## Server environment requirements
-We will use the UCI HPC3 environment for analysis. Please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a server under **the second option** with "R4.3.3" and "Spatial Transcriptomics" available in the environment. Please request **4-8 CPU cores**, with **6Gb of memory** for each core.
+We will use the UCI HPC3 environment for analysis. Please navigate to the [JypyterHub portal](https://hpc3.rcic.uci.edu/biojhub4/hub/login), and start a container under the one with ** *CaSB Short Course ** which has "R4.3.3" and required R packages installed in the environment. Please request **4-8 CPU cores**, with **6Gb of memory** for each core.
 
 ```{r echo=FALSE, fig.align = 'center', out.width = "100%", fig.cap = "JupyterHub server setting", }
 knitr::include_graphics("images/hpc3.png")
 ```
 
-Once the server started, click to open "Rstudio" app.
+Once the server started, click to open "Rstudio" app or a "Notebook" app under R kernel.
 
 ## R libraries
 
-Please make sure to install the following packages before running the codes. `Seurat` and `SeuratData` should have installed in the environment if you are using HPC3 server.
+If you want to run analysis using your own laptop, please make sure you have the latest R and RStudio installed. You can refer to [RStudio website](https://posit.co/download/rstudio-desktop/) for installation instructions. 
+
+Below are the codes needed to install the necessary R packages if you are using your laptop. `Seurat` and `Signac` are the major packages for analysis in this tutorial.
 
 ```{r eval=FALSE}
 # Enter commands in R (or R studio, if installed)
@@ -74,13 +76,11 @@ install.packages('ggseqlogo')
 # install.packages("VariantAnnotation_1.50.0.tgz", repos = NULL, type="source")
 ```
 
-If you want to run future analysis using your own laptop, please make sure you have the latest R and RStudio installed. You can refer to [RStudio website](https://posit.co/download/rstudio-desktop/) for installation instructions. 
-
 * Seurat installation: https://satijalab.org/seurat/articles/install_v5
 * Signac installation: https://stuartlab.org/signac/articles/install
 * SeuratData installation: https://github.com/satijalab/seurat-data
 
-## Construct folder structure
+## Construct folder structure in Terminal
 
 Some basic bash/shell commands
 ```{bash eval=F}
