@@ -53,7 +53,7 @@ pbmc.atac <- RunUMAP(pbmc.atac, reduction = "lsi", dims = 2:30, reduction.name =
 ```
 
 ```{r eval=T, warning=FALSE,message=FALSE}
-p1 <- DimPlot(pbmc.rna, group.by = "seurat_annotations", reduction = "umap.rna",label = TRUE) + NoLegend() + ggtitle("RNA")
+p1 <- DimPlot(pbmc.rna, group.by = "seurat_annotations", reduction = "umap",label = TRUE) + NoLegend() + ggtitle("RNA")
 p2 <- DimPlot(pbmc.atac, group.by = "orig.ident", reduction="umap.atac", label = FALSE) + NoLegend() + ggtitle("ATAC")
 p1 + p2
 
@@ -65,9 +65,9 @@ p1 + p2
 In order to identify ‘anchors’ between scRNA-seq and scATAC-seq experiments, we first generate a rough estimate of the transcriptional activity of each gene by quantifying ATAC-seq counts in the 2 kb-upstream region and gene body, using the GeneActivity() function in the Signac package. The ensuing gene activity scores from the scATAC-seq data are then used as input for canonical correlation analysis, along with the gene expression quantifications from scRNA-seq. We perform this quantification for all genes identified as being highly variable from the scRNA-seq dataset.
 
 
-```{r eval=F, warning=FALSE,message=FALSE}
+```{r eval=T, warning=FALSE,message=FALSE}
 # quantify gene activity
-gene.activities <- GeneActivity(pbmc,assay="ATAC",features = VariableFeatures(pbmc.rna))
+gene.activities <- GeneActivity(pbmc.atac, assay="ATAC",features = VariableFeatures(pbmc.rna))
 
 # add gene activities as a new assay
 pbmc.atac[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities)
@@ -85,7 +85,7 @@ transfer.anchors <- FindTransferAnchors(reference = pbmc.rna, query = pbmc.atac,
 ## Annotate scATAC-seq cells via label transfer
 After identifying anchors, we can transfer annotations from the scRNA-seq dataset onto the scATAC-seq cells. The annotations are stored in the seurat_annotations field, and are provided as input to the refdata parameter. The output will contain a matrix with predictions and confidence scores for each ATAC-seq cell.
 
-```{r eval=F, warning=FALSE,message=FALSE}
+```{r eval=T, warning=FALSE,message=FALSE}
 celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = pbmc.rna$seurat_annotations,
     weight.reduction = pbmc.atac[["lsi"]], dims = 2:30)
 
