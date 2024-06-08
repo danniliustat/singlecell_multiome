@@ -99,7 +99,7 @@ After performing transfer, the ATAC-seq cells have predicted annotations (transf
 pbmc<-readRDS("../pbmc_data/pbmc_atac_integrated.rds")
 ```
 
-```{r eval=T,echo=F,warning=FALSE,message=FALSE, fig.cap='Compare cell labels in integrated vs truth', out.width='100%', fig.asp=0.7, fig.align='center'}
+```{r eval=T,echo=F,warning=FALSE,message=FALSE, fig.cap='Compare cell labels in integrated vs truth', out.width='150%', fig.asp=0.7, fig.align='center'}
 pbmc.atac$annotation_correct <- pbmc.atac$predicted.id == pbmc.atac$seurat_annotations
 p1 <- DimPlot(pbmc.atac, group.by = "predicted.id", label = TRUE) + NoLegend() + ggtitle("Predicted annotation")
 p2 <- DimPlot(pbmc.atac, group.by = "seurat_annotations", label = TRUE) + NoLegend() + ggtitle("Ground-truth annotation")
@@ -124,7 +124,8 @@ p2 <- ggplot(data, aes(prediction.score.max, fill = annotation_correct, colour =
     geom_density(alpha = 0.5) + theme_cowplot() + scale_fill_discrete(name = "Annotation Correct",
     labels = c(paste0("FALSE (n = ", incorrect, ")"), paste0("TRUE (n = ", correct, ")"))) + scale_color_discrete(name = "Annotation Correct",
     labels = c(paste0("FALSE (n = ", incorrect, ")"), paste0("TRUE (n = ", correct, ")"))) + xlab("Prediction Score")
-p1 + p2
+p1
+p2
 
 ```
 

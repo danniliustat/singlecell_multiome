@@ -271,16 +271,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-4"><a href="data-integration.html#cb5-4" tabindex="-1"></a>pbmc.atac <span class="ot">&lt;-</span> <span class="fu">AddMetaData</span>(pbmc.atac, <span class="at">metadata =</span> celltype.predictions)</span></code></pre></div>
 <p>After performing transfer, the ATAC-seq cells have predicted annotations (transferred from the scRNA-seq dataset) stored in the predicted.id field. Since these cells were measured with the multiome kit, we also have a ground-truth annotation that can be used for evaluation. You can see that the predicted and actual annotations are extremely similar.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-8-1.png" alt="Compare cell labels in integrated vs truth" width="100%" />
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-8-1.png" alt="Compare cell labels in integrated vs truth" width="150%" />
 <p class="caption">
 Figure 8.1: Compare cell labels in integrated vs truth
 </p>
 </div>
 <p>In this example, the annotation for an scATAC-seq profile is correctly predicted via scRNA-seq integration ~90% of the time. In addition, the prediction.score.max field quantifies the uncertainty associated with our predicted annotations. We can see that cells that are correctly annotated are typically associated with high prediction scores (&gt;90%), while cells that are incorrectly annotated are associated with sharply lower prediction scores (&lt;50%). Incorrect assignments also tend to reflect closely related cell types (i.e. Intermediate vs. Naive B cells).</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9-1"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-9-1.png" alt="Prediction accuracy" width="150%" />
 <p class="caption">
 Figure 8.2: Prediction accuracy
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9-2"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-9-2.png" alt="Prediction accuracy" width="150%" />
+<p class="caption">
+Figure 8.3: Prediction accuracy
 </p>
 </div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="data-integration.html#cb6-1" tabindex="-1"></a><span class="fu">saveRDS</span>(pbmc.atac,<span class="at">file=</span><span class="st">&quot;pbmc_atac_integrated.rds&quot;</span>)</span></code></pre></div>
